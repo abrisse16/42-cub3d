@@ -1,0 +1,8 @@
+.DS_Store
+.vscode/*
+objs/*
+deps/*
+*.o
+*.d
+libs/*.a
+cub3d
