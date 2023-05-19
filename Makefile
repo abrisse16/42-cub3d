@@ -6,7 +6,7 @@
 #    By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/08 21:52:26 by abrisse           #+#    #+#              #
-#    Updated: 2023/05/08 22:05:14 by abrisse          ###   ########.fr        #
+#    Updated: 2023/05/19 15:33:06 by abrisse          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,13 +22,13 @@ _WHITE		=	$'\033[1;37m
 _NEUTRAL	=	$'\033[m
 
 # VARIABLE
-EXEC	=	cub3d
+EXEC	=	cub3D
 
 CC		=	gcc
 
-CFLAGS	=	-Wall -Wextra -Werror -g
-IFLAGS	=	-I includes/ -I libs/libft/includes/ -I libs/minilibx-linux/
-LDFLAGS	=	-L libs/ -lft -lmlx -lXext -lX11 -lm
+CFLAGS	=	-Wall -Wextra -Werror -g -MMD
+IFLAGS	=	-I includes/ -I libs/libft/includes/ -I libs/libmlx/
+LDFLAGS	=	-L libs/libft/ -lft -L libs/libmlx/ -lmlx -lXext -lX11 -lm
 
 INC_PATH=	includes/
 DEP_PATH=	deps/
@@ -37,8 +37,9 @@ LIB_PATH=	libs/
 SRC_PATH=	srcs/
 vpath %.c $(SRC_PATH)
 vpath %.a $(LIB_PATH)
-LIB		=	libft/libft.a minilibx-linux/libmlx.a
-SRC		=	main.c
+LIB		=	libft.a libmlx.a
+SRC		=	main.c	\
+			error.c
 DEP		=	$(addprefix $(DEP_PATH), $(SRC:.c=.d))
 OBJ		=	$(addprefix $(OBJ_PATH), $(SRC:.c=.o))
 
@@ -46,11 +47,11 @@ OBJ		=	$(addprefix $(OBJ_PATH), $(SRC:.c=.o))
 all		:	$(EXEC)
 
 $(EXEC)	:	$(addprefix $(LIB_PATH), $(LIB)) $(OBJ)
-	$(_GREY)$(CC) $(CFLAGS) -o $@ $(OBJ) $(LDFLAGS)$(_NEUTRAL)
+	$(CC) $(CFLAGS) -o $@ $(OBJ) $(LDFLAGS)
 	@echo "$(_GREEN)[$(EXEC): Executable created]$(_NEUTRAL)"
 
 %.a		:
-	@make -C $(@:.a=) install
+	@make -C $(@:.a=)
 
 $(OBJ_PATH)%.o	:	%.c
 	@mkdir -p $(OBJ_PATH) $(DEP_PATH)
@@ -62,16 +63,16 @@ $(OBJ_PATH)%.o	:	%.c
 
 # RULES
 clean	:
+	make clean -C libs/libft/
+	make clean -C libs/libmlx/
 	rm -rf $(OBJ_PATH)
 	rm -rf $(DEP_PATH)
 
 
-fclean	:	clean $(foreach lib, $(LIB, $(LIB_PATH)$(lib:.a=)_fclean)
+fclean	:	clean
+	make fclean -C libs/libft/
 	rm -rf $(EXEC)
 	rm -rf $(addprefix $(LIB_PATH), $(LIB))
-
-%_fclean :
-	@make -C $(subst _, , $@)
 
 re		: fclean all
 
