@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:06:11 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/20 16:58:52 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/21 21:46:15 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct s_data
 	int			floor[3];
 	int			celling[3];
 	int			data_count;
+	int			have_them_all;
 }	t_data;
 
 /* error.c */
@@ -57,5 +58,11 @@ int	ft_perror(char *str);
 
 /* parsing.c */
 int	parsing(int fd, t_data *data);
+
+/* checking_description.c */
+int	check_description(t_data *data);
+
+/* checking_map.c */
+int	check_map(t_data *data);
 
 #endif

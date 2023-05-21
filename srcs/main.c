@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:04:05 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/20 18:52:00 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/21 21:35:36 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,10 @@ int	main(int ac, char **av)
 	if (parsing(fd, &data))
 	{
 		close(fd);
+		ft_clean_memory();
 		return (1);
 	}
 	close(fd);
-
-	printf("\npath to north = %s\n", data.no);
-
 	ft_clean_memory();
-
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 19:13:25 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/20 18:59:31 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/21 21:57:44 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,33 +14,33 @@
 
 static int	get_texture(char *line, char **target, t_data *data)
 {
-	char **new;
+	char	**new;
 
-	new = ft_split(line, " ");
+	new = ft_split(line, " \n");
 	*target = ft_strdup(new[1]);
 	data->data_count += 1;
-	if (data->data_count == 6)
-		return (1);
-	else
-		return (0);
+	return (0);
 }
 
-static int	get_color(char *line, int **target, t_data *data)
+static int	get_color(char *line, int *target, t_data *data)
 {
-	char **new;
+	char	**new;
 
-	new = ft_split(line, " ");
-
+	new = ft_split(line, ", \n");
+	if (!new[3])
+		return (ft_error("Missing value for the RGB color"));
+	target[0] = atoi(new[1]);
+	target[1] = atoi(new[2]);
+	target[2] = atoi(new[3]);
 	data->data_count += 1;
-	if (data->data_count == 6)
-		return (1);
-	else
-		return (0);
+	return (0);
 }
 
 static int	get_data(char *line, t_data *data)
 {
-	if (ft_strncmp(line, "NO ", 3) == 0)
+	if (ft_strncmp(line, "\n", 1) == 0)
+		return (0);
+	else if (ft_strncmp(line, "NO ", 3) == 0)
 		return (get_texture(line, &data->no, data));
 	else if (ft_strncmp(line, "SO ", 3) == 0)
 		return (get_texture(line, &data->so, data));
@@ -49,17 +49,16 @@ static int	get_data(char *line, t_data *data)
 	else if (ft_strncmp(line, "EA ", 3) == 0)
 		return (get_texture(line, &data->ea, data));
 	else if (ft_strncmp(line, "C ", 2) == 0)
-		return (get_color(line, &data->celling, data));
+		return (get_color(line, data->celling, data));
 	else if (ft_strncmp(line, "F ", 2) == 0)
-		return (get_color(line, &data->floor, data));
-	return (0);
+		return (get_color(line, data->floor, data));
+	return (ft_error("Invalid data in the file"));
 }
 
 static t_list	*get_file(int fd, t_data *data)
 {
 	char	*line;
 	t_list	*lst;
-	int		have_them_all;
 
 	line = get_next_line(fd);
 	if (!line)
@@ -68,13 +67,12 @@ static t_list	*get_file(int fd, t_data *data)
 		return (NULL);
 	}
 	lst = NULL;
-	have_them_all = 0;
 	while (line)
 	{
-		if (have_them_all)
+		if (data->data_count == 6)
 			ft_lstadd_back(&lst, ft_lstnew(line));
-		else
-			have_them_all = get_data(line, data);
+		else if (get_data(line, data))
+			return (NULL);
 		line = get_next_line(fd);
 	}
 	return (lst);
@@ -87,12 +85,16 @@ int	parsing(int fd, t_data *data)
 	lst = get_file(fd, data);
 	if (!lst)
 		return (1);
+	if (check_description(data))
+		return (1);
 
-	
-	while(lst)
+	while (lst)
 	{
 		printf("%s", (char *)lst->content);
 		lst = lst->next;
 	}
+	
+	if (check_map(data))
+		return (1);
 	return (0);
 }
