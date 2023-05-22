@@ -6,7 +6,7 @@
 #    By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/08 21:52:26 by abrisse           #+#    #+#              #
-#    Updated: 2023/05/21 21:33:34 by abrisse          ###   ########.fr        #
+#    Updated: 2023/05/22 23:40:54 by abrisse          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,8 +41,9 @@ LIB		=	libft.a libmlx.a
 SRC		=	main.c	\
 			error.c	\
 			parsing.c	\
-			checking_description.c	\
-			checking_map.c
+			check_description.c	\
+			check_map.c	\
+			get_map.c
 DEP		=	$(addprefix $(DEP_PATH), $(SRC:.c=.d))
 OBJ		=	$(addprefix $(OBJ_PATH), $(SRC:.c=.o))
 

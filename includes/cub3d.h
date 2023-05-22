@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:06:11 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/21 21:46:15 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/22 23:40:28 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,17 @@ typedef struct s_graphic
 	void	*win;
 }	t_graphic;
 
+typedef struct s_map
+{
+	char	**map;
+	int		width;
+	int		height;
+	char	dir;
+}	t_map;
+
 typedef struct s_data
 {
-//	t_map		map;
+	t_map		map;
 //	t_game		game;
 	t_graphic	graphic;
 	char		*no;
@@ -55,14 +63,19 @@ typedef struct s_data
 /* error.c */
 int	ft_error(char *str);
 int	ft_perror(char *str);
+int	ft_error_line(char *str, int line, int column);
 
 /* parsing.c */
 int	parsing(int fd, t_data *data);
 
-/* checking_description.c */
+/* check_description.c */
 int	check_description(t_data *data);
 
-/* checking_map.c */
-int	check_map(t_data *data);
+/* check_map.c */
+int	check_map(t_list **lst, t_data *data);
+
+/* get_map.c */
+char	*line_no_space(char *line);
+int	create_map(t_list *lst, t_data *data);
 
 #endif

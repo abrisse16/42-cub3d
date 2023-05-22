@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 19:13:25 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/21 21:57:44 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/22 23:34:38 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ static t_list	*get_file(int fd, t_data *data)
 			return (NULL);
 		line = get_next_line(fd);
 	}
+	if (!lst)
+		ft_error("Invalid file (map is missing)");
 	return (lst);
 }
 
@@ -87,14 +89,7 @@ int	parsing(int fd, t_data *data)
 		return (1);
 	if (check_description(data))
 		return (1);
-
-	while (lst)
-	{
-		printf("%s", (char *)lst->content);
-		lst = lst->next;
-	}
-	
-	if (check_map(data))
+	if (check_map(&lst, data))
 		return (1);
 	return (0);
 }
