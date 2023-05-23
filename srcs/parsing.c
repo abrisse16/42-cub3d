@@ -6,13 +6,13 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 19:13:25 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/22 23:34:38 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/23 22:16:57 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static int	get_texture(char *line, char **target, t_data *data)
+static int	get_texture_path(char *line, char **target, t_data *data)
 {
 	char	**new;
 
@@ -41,13 +41,13 @@ static int	get_data(char *line, t_data *data)
 	if (ft_strncmp(line, "\n", 1) == 0)
 		return (0);
 	else if (ft_strncmp(line, "NO ", 3) == 0)
-		return (get_texture(line, &data->no, data));
+		return (get_texture_path(line, &data->no, data));
 	else if (ft_strncmp(line, "SO ", 3) == 0)
-		return (get_texture(line, &data->so, data));
+		return (get_texture_path(line, &data->so, data));
 	else if (ft_strncmp(line, "WE ", 3) == 0)
-		return (get_texture(line, &data->we, data));
+		return (get_texture_path(line, &data->we, data));
 	else if (ft_strncmp(line, "EA ", 3) == 0)
-		return (get_texture(line, &data->ea, data));
+		return (get_texture_path(line, &data->ea, data));
 	else if (ft_strncmp(line, "C ", 2) == 0)
 		return (get_color(line, data->celling, data));
 	else if (ft_strncmp(line, "F ", 2) == 0)

@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 21:34:57 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/22 23:39:46 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/23 22:13:49 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,11 @@ static int	check_char(t_data *data)
 			if (ft_strchr("01NSEW \n", data->map.map[i][j]) == NULL)
 				return (ft_error("Wrong character in the map"));
 			if (ft_strchr("NSEW", data->map.map[i][j]) && data->map.dir == 'x')
+			{
 				data->map.dir = data->map.map[i][j];
+				data->player.coord.x = TILE_SIZE * j + TILE_SIZE / 2;
+				data->player.coord.y = TILE_SIZE * i + TILE_SIZE / 2;
+			}
 			else if (ft_strchr("NSEW", data->map.map[i][j]))
 				return (ft_error("The map contain multiple starting position"));
 		}

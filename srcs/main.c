@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:04:05 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/21 21:35:36 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/23 23:43:29 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,19 @@ int	check_args(int ac, char **av)
 	if (str == NULL || ft_strcmp(str, ".cub") || !ft_strcmp(av[1], ".cub"))
 		return (ft_error("Invalid format file"));
 	return (0);
+}
+
+void	free_graphic(t_graphic *g)
+{
+	if (g->mini_map.img)
+		mlx_destroy_image(g->mlx, g->mini_map.img);
+	if (g->win)
+		mlx_destroy_window(g->mlx, g->win);
+	if (g->mlx)
+	{
+		mlx_destroy_display(g->mlx);
+		free(g->mlx);
+	}
 }
 
 int	main(int ac, char **av)
@@ -41,6 +54,10 @@ int	main(int ac, char **av)
 		ft_clean_memory();
 		return (1);
 	}
+	init_data(&data);
+	init_window(&data);
+	play(&data);
+	free_graphic(&data.graphic);
 	close(fd);
 	ft_clean_memory();
 	return (0);
