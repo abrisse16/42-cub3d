@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 21:34:57 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/23 22:13:49 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/24 19:36:16 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,25 +37,25 @@ static int	check_empty_lines(t_list **lst)
 
 static int	check_char(t_data *data)
 {
-	int	i;
-	int	j;
+	int	x;
+	int	y;
 
 	data->map.dir = 'x';
-	i = -1;
-	while (data->map.map[++i])
+	y = -1;
+	while (data->map.map[++y])
 	{
-		j = -1;
-		while (data->map.map[i][++j])
+		x = -1;
+		while (data->map.map[y][++x])
 		{
-			if (ft_strchr("01NSEW \n", data->map.map[i][j]) == NULL)
+			if (ft_strchr("01NSEW \n", data->map.map[y][x]) == NULL)
 				return (ft_error("Wrong character in the map"));
-			if (ft_strchr("NSEW", data->map.map[i][j]) && data->map.dir == 'x')
+			if (ft_strchr("NSEW", data->map.map[y][x]) && data->map.dir == 'x')
 			{
-				data->map.dir = data->map.map[i][j];
-				data->player.coord.x = TILE_SIZE * j + TILE_SIZE / 2;
-				data->player.coord.y = TILE_SIZE * i + TILE_SIZE / 2;
+				data->map.dir = data->map.map[y][x];
+				data->player.coord.x = TILE_SIZE * x + TILE_SIZE / 2;
+				data->player.coord.y = TILE_SIZE * y + TILE_SIZE / 2;
 			}
-			else if (ft_strchr("NSEW", data->map.map[i][j]))
+			else if (ft_strchr("NSEW", data->map.map[y][x]))
 				return (ft_error("The map contain multiple starting position"));
 		}
 	}
@@ -79,17 +79,17 @@ static int	check_error(char **map, int i, int j, t_data *data)
 
 static int	check_walls(char **map, t_data *data)
 {
-	int	i;
-	int	j;
+	int	y;
+	int	x;
 
-	i = -1;
-	while (map[++i])
+	y = -1;
+	while (map[++y])
 	{
-		j = -1;
-		while (map[i][++j])
+		x = -1;
+		while (map[y][++x])
 		{
-			if (ft_strchr("0NSEW", map[i][j]))
-				if (check_error(map, i, j, data))
+			if (ft_strchr("0NSEW", map[y][x]))
+				if (check_error(map, y, x, data))
 					return (ft_error("Map not surrouned by walls"));
 		}
 	}

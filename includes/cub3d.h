@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:06:11 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/23 23:21:00 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/24 22:21:22 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@
 typedef struct s_img
 {
 	void	*img;
-	char	*data;
 	char	*addr;
 	int		bpp;
 	int		line_len;
@@ -117,5 +116,9 @@ int	init_window(t_data *data);
 
 /* game.c */
 void	play(t_data *data);
+
+/* point.c */
+void	draw_rect(t_img *img, const t_point *start, int size, int color);
+t_point	create_point(float x, float y);
 
 #endif

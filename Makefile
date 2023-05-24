@@ -6,7 +6,7 @@
 #    By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/08 21:52:26 by abrisse           #+#    #+#              #
-#    Updated: 2023/05/23 23:21:10 by abrisse          ###   ########.fr        #
+#    Updated: 2023/05/24 22:15:59 by abrisse          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,8 @@ SRC		=	main.c	\
 			check_map.c	\
 			get_map.c	\
 			init.c		\
-			game.c
+			game.c	\
+			point.c
 DEP		=	$(addprefix $(DEP_PATH), $(SRC:.c=.d))
 OBJ		=	$(addprefix $(OBJ_PATH), $(SRC:.c=.o))
 
