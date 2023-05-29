@@ -6,26 +6,31 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:04:05 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/28 20:12:45 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/29 18:25:35 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	check_args(int ac, char **av)
+static int	check_args(int ac, char **av)
 {
-	char	*str;
-
 	if (ac != 2)
 		return (ft_error("Incorrect number of arguments"));
-	str = ft_strrchr(av[1], '.');
-	if (str == NULL || ft_strcmp(str, ".cub") || !ft_strcmp(av[1], ".cub"))
+	if (check_extension(av[1], ".cub"))
 		return (ft_error("Invalid format file"));
 	return (0);
 }
 
-void	free_graphic(t_graphic *g)
+static void	free_graphic(t_graphic *g)
 {
+	if (g->north_texture.img)
+		mlx_destroy_image(g->mlx, g->north_texture.img);
+	if (g->south_texture.img)
+		mlx_destroy_image(g->mlx, g->south_texture.img);
+	if (g->east_texture.img)
+		mlx_destroy_image(g->mlx, g->east_texture.img);
+	if (g->west_texture.img)
+		mlx_destroy_image(g->mlx, g->west_texture.img);
 	if (g->mini_map.img)
 		mlx_destroy_image(g->mlx, g->mini_map.img);
 	if (g->game.img)
@@ -56,21 +61,11 @@ int	main(int ac, char **av)
 		ft_clean_memory();
 		return (1);
 	}
-	init_data(&data);
-	init_window(&data);
-
-/* 	int i = -1;
-	int j = -1;
-	while (data.map.map[++i])
-	{
-		j = -1;
-		while (data.map.map[i][++j])
-			printf("%c", data.map.map[i][j]);
-	} */
-
-	play(&data);
-	free_graphic(&data.graphic);
 	close(fd);
+	init_data(&data);
+	if (!init_graphic(&data))
+		start(&data);
+	free_graphic(&data.graphic);
 	ft_clean_memory();
 	return (0);
 }

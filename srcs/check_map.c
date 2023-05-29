@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 21:34:57 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/28 19:33:53 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/29 13:31:44 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,6 @@ static int	check_walls(char **map, t_data *data)
 
 int	check_map(t_list **lst, t_data *data)
 {
-	(void)data;
 	if (check_empty_lines(lst))
 		return (1);
 	if (create_map(*lst, data))

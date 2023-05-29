@@ -6,7 +6,7 @@
 #    By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/08 21:52:26 by abrisse           #+#    #+#              #
-#    Updated: 2023/05/28 23:12:43 by abrisse          ###   ########.fr        #
+#    Updated: 2023/05/29 21:56:13 by abrisse          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,20 +38,20 @@ SRC_PATH=	srcs/
 vpath %.c $(SRC_PATH)
 vpath %.a $(LIB_PATH)
 LIB		=	libft.a libmlx.a
-SRC		=	main.c				\
-			error.c				\
-			parsing.c			\
+SRC		=	main.c	\
 			check_description.c	\
-			check_map.c			\
-			get_map.c			\
-			init.c				\
-			game.c				\
-			point.c				\
-			render.c			\
-			draw.c				\
-			player.c			\
-			raycasting.c		\
-			ray_intercept.c
+			check_map.c	\
+			error.c	\
+			events.c	\
+			game.c	\
+			get_map.c	\
+			init.c	\
+			parsing.c	\
+			point.c		\
+			raycasting.c	\
+			ray_intercept.c	\
+			draw.c	\
+			render.c
 DEP		=	$(addprefix $(DEP_PATH), $(SRC:.c=.d))
 OBJ		=	$(addprefix $(OBJ_PATH), $(SRC:.c=.o))
 

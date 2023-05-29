@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:06:11 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/29 05:16:12 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/29 23:40:10 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <math.h>
 # include <X11/keysym.h>
 # include <limits.h>
+# include <float.h>
 
 # include "libft.h"
 # include "mlx.h"
@@ -31,6 +32,15 @@
 # define WALL_STRIP_WIDTH 1				// width of a wall strip in pixels
 # define WALK_SPEED 2.0f				// walk speed in pixels per frame
 # define TURN_SPEED 2					// rotation speed in degrees per frame
+
+typedef	struct s_to_draw
+{
+	int		color;
+	int		width;
+	int		height;
+	int		x;
+	int		y;
+}	t_to_draw;
 
 typedef struct s_img
 {
@@ -51,38 +61,43 @@ typedef struct s_point
 
 typedef struct s_ray
 {
-	float	ray_angle;
 	t_point	hit_coord;
 	float	hit_distance;
+	float	angle;
+	int		is_facing_up;
+	int		is_facing_left;
 	int		was_hit_vertical;
 	int		was_hit_horizontal;
-	t_point horz_hit_coord;
-	t_point vert_hit_coord;
-	float	xintercept;
-	float	yintercept;
-	float	xstep;
-	float	ystep;
-	int		is_facing_down;
-	int		is_facing_up;
-	int		is_facing_right;
-	int		is_facing_left;
+	t_point intercept;
+	t_point	step;
 	int		horz_hit_found;
 	int		vert_hit_found;
+	t_point horz_hit_coord;
+	t_point vert_hit_coord;
 	float	horz_hit_distance;
 	float	vert_hit_distance;
+	
+	
+
+	
+	
+	
+
+	int		strip_x;
+	int 	strip_y;
+	int		strip_width;
+	int		strip_height;
 }	t_ray;
 
 typedef struct s_player
 {
 	t_point	coord;
-	float	rotation_angle; // rotation angle in radians
-	
+	float	rotation_angle;
 	int		turn_direction;
 	int		walk_direction;
 	int		side_direction;
-	
-	float	walk_speed;	// walk speed of the player in pixels per frame
-	float	turn_speed;	// turn speed of the player in radians per frame
+	float	walk_speed;
+	float	turn_speed;
 }	t_player;
 
 typedef struct s_graphic
@@ -91,13 +106,13 @@ typedef struct s_graphic
 	void	*win;
 	int		win_width;
 	int		win_height;
+	float	distance_projection;	// setup
 	t_img	mini_map;
 	t_img	game;
-	float	distance_projection;
-	int		strip_x;
-	int 	strip_y;
-	int		strip_width;
-	int		strip_height;
+	t_img 	north_texture;
+	t_img 	south_texture;
+	t_img 	west_texture;
+	t_img 	east_texture;
 }	t_graphic;
 
 typedef struct s_map
@@ -108,13 +123,21 @@ typedef struct s_map
 	char	dir;
 }	t_map;
 
+typedef struct s_wall
+{
+	float	wall_distance;
+	float	projected_wall_height;
+	int		top_distance;
+	int		color_x;
+	int		color_y;
+}	t_wall;
+
 typedef struct s_data
 {
 	t_map		map;
-//	t_game		game;
 	t_graphic	graphic;
 	t_player	player;
-	
+	t_ray		*rays;
 	char		*no;
 	char		*so;
 	char		*we;
@@ -122,23 +145,24 @@ typedef struct s_data
 	int			floor[3];
 	int			celling[3];
 	int			data_count;
-	int			have_them_all;
-
 	float		fov_angle;
 	int			num_rays;
-
+	t_to_draw	to_draw;
+	t_wall		wall;
+//	int			have_them_all;
 }	t_data;
+
 
 /* error.c */
 int	ft_error(char *str);
 int	ft_perror(char *str);
-int	ft_error_line(char *str, int line, int column);
 
-/* parsing.c */
+/* parsing.c : FILE OKAY */
 int	parsing(int fd, t_data *data);
 
 /* check_description.c */
 int	check_description(t_data *data);
+int	check_extension(char *file, char *ext);
 
 /* check_map.c */
 int	check_map(t_list **lst, t_data *data);
@@ -149,31 +173,22 @@ int	create_map(t_list *lst, t_data *data);
 
 /* init.c */
 void	init_data(t_data *data);
-int	init_window(t_data *data);
-
-/* game.c */
-void	play(t_data *data);
+int		init_graphic(t_data *data);
 
 /* point.c */
 void	set_point(t_point *point, double x, double y);
 double	distance(t_point a, t_point b);
 t_point	create_point(double x, double y);
 
-/* render.c */
-void	render_minimap(t_data *data);
-void	render_player(t_data *data);
-int		has_wall_at(t_data *data, float new_x, float new_y);
+/* game.c */
+void	start(t_data *data);
+int		has_wall_at(t_data *data, float x, float y);
+float	normalize_angle(float angle);
 
-/* draw.c */
-void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
-void	draw_line(t_img *img, t_point *start, float angle, int distance);
-void	draw_circle(t_img *img, t_point *center, int radius, int color);
-void	draw_rect_mini(t_img *img, const t_point *start, const t_point *end, int color);
-void	draw_rect(t_graphic *graphic, int color);
-
-
-/* player.c */
-void	update_player(t_data *data);
+/* events.c */
+int	key_pressed(int key, t_data *data);
+int	key_released(int key, t_data *data);
+int	cross_pressed(t_data *data);
 
 /* raycasting.c */
 void	cast_all_rays(t_data *data);
@@ -181,5 +196,34 @@ void	cast_all_rays(t_data *data);
 /* ray_intercept.c */
 void	horizontal_intercept(t_ray *ray, t_data *data);
 void	vertical_intercept(t_ray *ray, t_data *data);
+
+/* render.c */
+void render_background(t_data *data);
+void	render_walls(t_data *data);
+
+/* draw.c */
+void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
+void	draw_rect(t_img *img, t_to_draw *to_draw);
+
+
+
+// /* render.c */
+// void	render_minimap(t_data *data);
+// void	render_player(t_data *data);
+// int		has_wall_at(t_data *data, float new_x, float new_y);
+
+// /* draw.c */
+// void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
+// void	draw_line(t_img *img, t_point *start, float angle, int distance);
+// void	draw_circle(t_img *img, t_point *center, int radius, int color);
+// void	draw_rect_mini(t_img *img, const t_point *start, const t_point *end, int color);
+// void	draw_wall(t_img *img, t_ray *ray, int color, t_data *data);
+// void	draw_background(t_img *img, int color, t_data *data, char c);
+
+// /* player.c */
+// void	update_player(t_data *data);
+
+
+
 
 #endif

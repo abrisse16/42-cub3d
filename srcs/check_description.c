@@ -6,13 +6,13 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 19:32:51 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/22 23:38:06 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/29 13:24:12 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static int	check_extension(char *file, char *ext)
+int	check_extension(char *file, char *ext)
 {
 	char	*str;
 
@@ -51,5 +51,7 @@ int	check_description(t_data *data)
 				"Path to the east texture is missing or invalid format file"));
 	if (check_rgb(data->celling))
 		return (ft_error("Color of the celling is not in the RGB range"));
+	if (check_rgb(data->floor))
+		return (ft_error("Color of the floor is not in the RGB range"));
 	return (0);
 }
