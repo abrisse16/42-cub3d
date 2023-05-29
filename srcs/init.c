@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 21:13:34 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/28 20:38:49 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/29 04:55:53 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ void	init_data(t_data *data)
 	init_player_rotation(data);
 	data->player.walk_speed = WALK_SPEED;
 	data->player.turn_speed = TURN_SPEED * (M_PI / 180);
+	data->graphic.distance_projection = (data->graphic.win_width / 2)
+		/ tan(data->fov_angle / 2);
 }
 
 int	init_img(void *mlx, t_img *img, int width, int height)

@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 13:25:43 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/29 00:05:47 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/29 05:29:20 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,22 @@ void	my_mlx_pixel_put(t_img *img, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
+void	draw_line(t_img *img, t_point *start, float angle, int distance)
+{
+	int	i;
+	int	x;
+	int	y;
+	
+	i = -1;
+	while (++i < distance * MINIMAP_SCALE_FACTOR)
+	{
+		x = (int)((start->x * MINIMAP_SCALE_FACTOR) + cos(angle) * i);
+		y = (int)((start->y * MINIMAP_SCALE_FACTOR) - sin(angle) * i);
+		my_mlx_pixel_put(img, x, y, 0x0000FF);
+	}
+}
+
+/* 
 void	draw_orientation(t_img *img, float angle, int color, t_data *data)
 {
 	int		i;
@@ -43,6 +59,7 @@ void	draw_orientation(t_img *img, float angle, int color, t_data *data)
 		i++;
 	}
 }
+ */
 
 /* TO DO : Réparer les pixels qui reste dehors */
 void	draw_circle(t_img *img, t_point *center, int radius, int color)
@@ -66,6 +83,20 @@ void	draw_circle(t_img *img, t_point *center, int radius, int color)
 			x++;
 		}
 		y++;
+	}
+}
+
+void	draw_rect(t_graphic *graphic, int color)
+{
+	int i;
+	int j;
+
+	i = -1;
+	while (++i < graphic->strip_height)
+	{
+		j = -1;
+		while (++j < graphic->strip_width)
+			my_mlx_pixel_put(graphic->game.img, graphic->strip_x + j, graphic->strip_y + i, color);
 	}
 }
 

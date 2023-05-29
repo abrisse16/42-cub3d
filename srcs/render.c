@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 13:23:02 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/29 01:40:46 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/29 04:05:08 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,6 @@ void	render_player(t_data *data)
 {
 	draw_circle(&data->graphic.mini_map, &data->player.coord,
 		RADIUS, mlx_get_color_value(data->graphic.mlx, 0xFF0000));
-/* 	draw_orientation(&data->graphic.mini_map, data->player.rotation_angle + data->fov_angle / 2, 0xFF0000,
-		data);
-	draw_orientation(&data->graphic.mini_map, data->player.rotation_angle - (data->fov_angle / 2), 0xFF0000,
-		data); */
 }
 
 void	render_minimap(t_data *data)

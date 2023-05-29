@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 23:10:12 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/29 00:17:08 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/29 04:04:32 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ int	what_next(t_data *data)
 	
 	mlx_put_image_to_window(data->graphic.mlx, data->graphic.win,
 		data->graphic.mini_map.img, 0, 0);
-		
-
 	return (0);
 }
 
