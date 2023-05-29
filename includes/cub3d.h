@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:06:11 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/24 22:21:22 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/29 02:02:23 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,18 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <math.h>
+# include <X11/keysym.h>
 
 # include "libft.h"
 # include "mlx.h"
 
-# define FOV_ANGLE 60	// le fov en degrés
-# define TILE_SIZE 64	// taille d'une texture en gros
-
-# define ESCAPE 65307
-# define W 119
-# define A 97
-# define S 115
-# define D 100
-# define LEFT 5
-# define RIGHT 6
+# define FOV_ANGLE 60					// field of view in degrees
+# define TILE_SIZE 64					// size of a tile in pixels
+# define MINIMAP_SCALE_FACTOR 0.5		// size of the minimap relative to the window
+# define RADIUS 4						// size of the player circle on the minimap
+# define WALL_STRIP_WIDTH 1				// width of a wall strip in pixels
+# define WALK_SPEED 2.0f				// walk speed in pixels per frame
+# define TURN_SPEED 2					// rotation speed in degrees per frame
 
 typedef struct s_img
 {
@@ -50,9 +48,34 @@ typedef struct s_point
 	float	y;
 }	t_point;
 
+typedef struct s_ray
+{
+	float	ray_angle;	// angle of the ray
+	t_point	wall_hit;	// coordinates of the collision point with the wall
+	t_point horz_wall_hit;
+	t_point vert_wall_hit;
+	float	distance;	// distance between the player and the collision point with the wall
+	float	xintercept;
+	float	yintercept;
+	float	xstep;
+	float	ystep;
+	int		was_hit_vertical;
+	int		was_hit_horizontal;
+	float	horz_hit_distance;
+	float	vert_hit_distance;
+}	t_ray;
+
 typedef struct s_player
 {
 	t_point	coord;
+	float	rotation_angle; // rotation angle in radians
+	
+	int		turn_direction;
+	int		walk_direction;
+	int		side_direction;
+	
+	float	walk_speed;	// walk speed of the player in pixels per frame
+	float	turn_speed;	// turn speed of the player in radians per frame
 }	t_player;
 
 typedef struct s_graphic
@@ -79,6 +102,7 @@ typedef struct s_data
 //	t_game		game;
 	t_graphic	graphic;
 	t_player	player;
+	
 	char		*no;
 	char		*so;
 	char		*we;
@@ -88,7 +112,8 @@ typedef struct s_data
 	int			data_count;
 	int			have_them_all;
 
-	float		fov_angle;		
+	float		fov_angle;
+	int			num_rays;
 
 }	t_data;
 
@@ -118,7 +143,29 @@ int	init_window(t_data *data);
 void	play(t_data *data);
 
 /* point.c */
-void	draw_rect(t_img *img, const t_point *start, int size, int color);
-t_point	create_point(float x, float y);
+void	set_point(t_point *point, double x, double y);
+double	distance(t_point a, t_point b);
+t_point	create_point(double x, double y);
+
+/* render.c */
+void	render_minimap(t_data *data);
+void	render_player(t_data *data);
+int		has_wall_at(t_data *data, float new_x, float new_y);
+
+/* draw.c */
+void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
+void	draw_orientation(t_img *img, float angle, int color, t_data *data);
+void	draw_circle(t_img *img, t_point *center, int radius, int color);
+void	draw_rect_mini(t_img *img, const t_point *start, const t_point *end, int color);
+
+/* player.c */
+void	update_player(t_data *data);
+
+/* raycasting.c */
+void	cast_all_rays(t_data *data);
+
+/* ray_intercept.c */
+void	horizontal_intercept(t_ray *ray, t_data *data);
+void	vertical_intercept(t_ray *ray, t_data *data);
 
 #endif

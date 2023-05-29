@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:04:05 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/23 23:43:29 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/28 20:12:45 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void	free_graphic(t_graphic *g)
 {
 	if (g->mini_map.img)
 		mlx_destroy_image(g->mlx, g->mini_map.img);
+	if (g->game.img)
+		mlx_destroy_image(g->mlx, g->game.img);
 	if (g->win)
 		mlx_destroy_window(g->mlx, g->win);
 	if (g->mlx)
@@ -56,6 +58,16 @@ int	main(int ac, char **av)
 	}
 	init_data(&data);
 	init_window(&data);
+
+/* 	int i = -1;
+	int j = -1;
+	while (data.map.map[++i])
+	{
+		j = -1;
+		while (data.map.map[i][++j])
+			printf("%c", data.map.map[i][j]);
+	} */
+
 	play(&data);
 	free_graphic(&data.graphic);
 	close(fd);

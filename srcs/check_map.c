@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 21:34:57 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/24 19:36:16 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/28 19:33:53 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ static int	check_char(t_data *data)
 				return (ft_error("The map contain multiple starting position"));
 		}
 	}
+	if (data->map.dir == 'x')
+		return (ft_error("No starting position"));
 	return (0);
 }
 
