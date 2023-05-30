@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:04:05 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/28 20:12:45 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/30 20:32:29 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,21 +56,11 @@ int	main(int ac, char **av)
 		ft_clean_memory();
 		return (1);
 	}
-	init_data(&data);
-	init_window(&data);
-
-/* 	int i = -1;
-	int j = -1;
-	while (data.map.map[++i])
-	{
-		j = -1;
-		while (data.map.map[i][++j])
-			printf("%c", data.map.map[i][j]);
-	} */
-
-	play(&data);
-	free_graphic(&data.graphic);
 	close(fd);
+	init_data(&data);
+	if (!init_graphic(&data))
+		start(&data);
+	free_graphic(&data.graphic);
 	ft_clean_memory();
 	return (0);
 }

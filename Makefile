@@ -6,7 +6,7 @@
 #    By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/08 21:52:26 by abrisse           #+#    #+#              #
-#    Updated: 2023/05/30 11:55:11 by abrisse          ###   ########.fr        #
+#    Updated: 2023/05/30 20:34:41 by abrisse          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,9 @@ SRC		=	main.c	\
 			raycasting.c	\
 			ray_intercept.c	\
 			draw.c	\
-			render.c
+			render.c	\
+			init_player.c	\
+			events.c
 DEP		=	$(addprefix $(DEP_PATH), $(SRC:.c=.d))
 OBJ		=	$(addprefix $(OBJ_PATH), $(SRC:.c=.o))
 

@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:06:11 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/30 11:56:28 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/31 00:34:25 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,17 @@
 # define WALK_SPEED 2.0f				// walk speed in pixels per frame
 # define TURN_SPEED 2					// rotation speed in degrees per frame
 
+/* structure validée */
+typedef struct s_to_draw
+{
+	int		x;
+	int		y;
+	int		width;
+	int		height;
+	int		color;
+}	t_to_draw;
+
+/* structure validée */
 typedef struct s_img
 {
 	void	*img;
@@ -44,49 +55,23 @@ typedef struct s_img
 	int		height;
 }	t_img;
 
+/* structure validée */
 typedef struct s_point
 {
 	float	x;
 	float	y;
 }	t_point;
 
-typedef struct s_ray
-{
-	t_point	hit_coord;
-	float	hit_distance;
-	float	ray_angle;
-	int		is_facing_up;
-	int		is_facing_down;
-	int		is_facing_left;
-	int		is_facing_right;
-	int		was_hit_vertical;
-	int		was_hit_horizontal;
-	float	xintercept;
-	float	yintercept;
-	float	xstep;
-	float	ystep;
-	int		horz_hit_found;
-	int		vert_hit_found;
-	t_point horz_hit_coord;
-	t_point vert_hit_coord;
-	float	horz_hit_distance;
-	float	vert_hit_distance;
-	int		strip_x;
-	int 	strip_y;
-	int		strip_width;
-	int		strip_height;
-
-}	t_ray;
-
+/* structure validée */
 typedef struct s_player
 {
 	t_point	coord;
-	float	rotation_angle;
+	float	angle;
 	int		turn_direction;
 	int		walk_direction;
 	int		side_direction;
-	float	walk_speed;
 	float	turn_speed;
+	float	walk_speed;
 }	t_player;
 
 typedef struct s_graphic
@@ -95,17 +80,19 @@ typedef struct s_graphic
 	void	*win;
 	int		win_width;
 	int		win_height;
-	float	distance_projection;	// setup
-	t_img	mini_map;
+	float	distance_projection;	// à déplacer dans data
 	t_img	game;
+	t_img	mini_map;
+
+	/* structure validée jusqu'ici */
+
 	t_img 	north_texture;
 	t_img 	south_texture;
 	t_img 	west_texture;
 	t_img 	east_texture;
-
-
 }	t_graphic;
 
+/* structure validée */
 typedef struct s_map
 {
 	char	**map;
@@ -114,30 +101,94 @@ typedef struct s_map
 	char	dir;
 }	t_map;
 
+typedef struct s_ray
+{
+	float	angle;
+	t_point	hit_coord;
+	float	hit_distance;
+	int		was_hit_horizontal;
+	int		is_facing_up;
+	int		is_facing_left;
+
+	int		horz_hit_found;
+	float	horz_hit_distance;
+	t_point horz_hit_coord;
+	int		vert_hit_found;
+	float	vert_hit_distance;
+	t_point vert_hit_coord;
+
+	t_point intercept;
+	t_point step;
+	
+	float		wall_distance;
+	t_to_draw	strip;
+}	t_ray;
+
 typedef struct s_data
 {
 	t_map		map;
 	t_graphic	graphic;
 	t_player	player;
-
+	t_ray		*rays;
 	char		*no;
 	char		*so;
 	char		*we;
 	char		*ea;
-	int			floor[3];
 	int			celling[3];
+	int			floor[3];
 	int			data_count;
 	float		fov_angle;
 	int			num_rays;
-//	int			have_them_all;
+	int			display_mini_map;
+	t_to_draw	to_draw;
+//	float		distance_projection;
 }	t_data;
 
 
-/* error.c */
+/* error.c : fichier validé */
 int	ft_error(char *str);
 int	ft_perror(char *str);
 
-/* parsing.c : FILE OKAY */
+/* init.c */
+void	init_data(t_data *data);
+int		init_graphic(t_data *data);
+
+/* game.c */
+void	start(t_data *data);
+int		has_wall_at(t_data *data, float x, float y);
+
+/* events.c : fichier validé */
+int	key_pressed(int key, t_data *data);
+int	key_released(int key, t_data *data);
+int	cross_pressed(t_data *data);
+
+/* player.c : fichier validée */
+void	update_player(t_data *data);
+
+/* init_player.c : fichier validé */
+void	init_player(t_data *data);
+
+/* raycasting.c : fichier validé */
+void	cast_all_rays(t_data *data);
+float	normalize_angle(float angle);
+
+/* ray_intercept.c : fichier validé */
+void	horizontal_intercept(t_ray *ray, t_data *data);
+void	vertical_intercept(t_ray *ray, t_data *data);
+
+/* render.c */
+void	render_background(t_data *data);
+void	render_walls(t_data *data);		// pour l'instant affiche juste des couleurs, pas les textures
+void	render_minimap(t_data *data);
+void	render_player(t_data *data);
+
+/* draw.c */
+void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
+void	draw_color_rect(t_img *img, t_to_draw *to_draw);
+void	draw_circle(t_img *img, t_point *center, int radius, int color);
+void	draw_ray(t_img *img, t_point *start, float angle, int distance);
+
+/* parsing.c */
 int	parsing(int fd, t_data *data);
 
 /* check_description.c */
@@ -148,60 +199,11 @@ int	check_map(t_list **lst, t_data *data);
 
 /* get_map.c */
 char	*line_no_space(char *line);
-int	create_map(t_list *lst, t_data *data);
-
-/* init.c */
-void	init_data(t_data *data);
-int		init_graphic(t_data *data);
-int	init_window(t_data *data);
-
+int		create_map(t_list *lst, t_data *data);
 
 /* point.c */
 void	set_point(t_point *point, double x, double y);
 double	distance(t_point a, t_point b);
 t_point	create_point(double x, double y);
-
-/* game.c */
-void	play(t_data *data);
-int		has_wall_at(t_data *data, float x, float y);
-float	normalize_angle(float angle);
-
-/* events.c */
-int	key_pressed(int key, t_data *data);
-int	key_released(int key, t_data *data);
-int	cross_pressed(t_data *data);
-
-/* raycasting.c */
-void	cast_all_rays(t_data *data);
-
-/* ray_intercept.c */
-void	horizontal_intercept(t_ray *ray, t_data *data);
-void	vertical_intercept(t_ray *ray, t_data *data);
-
-/* render.c */
-void render_background(t_data *data);
-void	render_walls(t_data *data);
-
-
-
-
-// /* render.c */
-void	render_minimap(t_data *data);
-void	render_player(t_data *data);
-int		has_wall_at(t_data *data, float new_x, float new_y);
-
-// /* draw.c */
-void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
-void	draw_line(t_img *img, t_point *start, float angle, int distance);
-void	draw_circle(t_img *img, t_point *center, int radius, int color);
-void	draw_rect_mini(t_img *img, const t_point *start, const t_point *end, int color);
-void	draw_wall(t_img *img, t_ray *ray, int color, t_data *data);
-void	draw_background(t_img *img, int color, t_data *data, char c);
-
-// /* player.c */
-void	update_player(t_data *data);
-
-
-
 
 #endif
