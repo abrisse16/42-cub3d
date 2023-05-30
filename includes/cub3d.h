@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:06:11 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/29 23:40:10 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/30 11:56:28 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,6 @@
 # define WALK_SPEED 2.0f				// walk speed in pixels per frame
 # define TURN_SPEED 2					// rotation speed in degrees per frame
 
-typedef	struct s_to_draw
-{
-	int		color;
-	int		width;
-	int		height;
-	int		x;
-	int		y;
-}	t_to_draw;
-
 typedef struct s_img
 {
 	void	*img;
@@ -63,30 +54,28 @@ typedef struct s_ray
 {
 	t_point	hit_coord;
 	float	hit_distance;
-	float	angle;
+	float	ray_angle;
 	int		is_facing_up;
+	int		is_facing_down;
 	int		is_facing_left;
+	int		is_facing_right;
 	int		was_hit_vertical;
 	int		was_hit_horizontal;
-	t_point intercept;
-	t_point	step;
+	float	xintercept;
+	float	yintercept;
+	float	xstep;
+	float	ystep;
 	int		horz_hit_found;
 	int		vert_hit_found;
 	t_point horz_hit_coord;
 	t_point vert_hit_coord;
 	float	horz_hit_distance;
 	float	vert_hit_distance;
-	
-	
-
-	
-	
-	
-
 	int		strip_x;
 	int 	strip_y;
 	int		strip_width;
 	int		strip_height;
+
 }	t_ray;
 
 typedef struct s_player
@@ -113,6 +102,8 @@ typedef struct s_graphic
 	t_img 	south_texture;
 	t_img 	west_texture;
 	t_img 	east_texture;
+
+
 }	t_graphic;
 
 typedef struct s_map
@@ -123,21 +114,12 @@ typedef struct s_map
 	char	dir;
 }	t_map;
 
-typedef struct s_wall
-{
-	float	wall_distance;
-	float	projected_wall_height;
-	int		top_distance;
-	int		color_x;
-	int		color_y;
-}	t_wall;
-
 typedef struct s_data
 {
 	t_map		map;
 	t_graphic	graphic;
 	t_player	player;
-	t_ray		*rays;
+
 	char		*no;
 	char		*so;
 	char		*we;
@@ -147,8 +129,6 @@ typedef struct s_data
 	int			data_count;
 	float		fov_angle;
 	int			num_rays;
-	t_to_draw	to_draw;
-	t_wall		wall;
 //	int			have_them_all;
 }	t_data;
 
@@ -162,7 +142,6 @@ int	parsing(int fd, t_data *data);
 
 /* check_description.c */
 int	check_description(t_data *data);
-int	check_extension(char *file, char *ext);
 
 /* check_map.c */
 int	check_map(t_list **lst, t_data *data);
@@ -174,6 +153,8 @@ int	create_map(t_list *lst, t_data *data);
 /* init.c */
 void	init_data(t_data *data);
 int		init_graphic(t_data *data);
+int	init_window(t_data *data);
+
 
 /* point.c */
 void	set_point(t_point *point, double x, double y);
@@ -181,7 +162,7 @@ double	distance(t_point a, t_point b);
 t_point	create_point(double x, double y);
 
 /* game.c */
-void	start(t_data *data);
+void	play(t_data *data);
 int		has_wall_at(t_data *data, float x, float y);
 float	normalize_angle(float angle);
 
@@ -201,27 +182,24 @@ void	vertical_intercept(t_ray *ray, t_data *data);
 void render_background(t_data *data);
 void	render_walls(t_data *data);
 
-/* draw.c */
-void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
-void	draw_rect(t_img *img, t_to_draw *to_draw);
 
 
 
 // /* render.c */
-// void	render_minimap(t_data *data);
-// void	render_player(t_data *data);
-// int		has_wall_at(t_data *data, float new_x, float new_y);
+void	render_minimap(t_data *data);
+void	render_player(t_data *data);
+int		has_wall_at(t_data *data, float new_x, float new_y);
 
 // /* draw.c */
-// void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
-// void	draw_line(t_img *img, t_point *start, float angle, int distance);
-// void	draw_circle(t_img *img, t_point *center, int radius, int color);
-// void	draw_rect_mini(t_img *img, const t_point *start, const t_point *end, int color);
-// void	draw_wall(t_img *img, t_ray *ray, int color, t_data *data);
-// void	draw_background(t_img *img, int color, t_data *data, char c);
+void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
+void	draw_line(t_img *img, t_point *start, float angle, int distance);
+void	draw_circle(t_img *img, t_point *center, int radius, int color);
+void	draw_rect_mini(t_img *img, const t_point *start, const t_point *end, int color);
+void	draw_wall(t_img *img, t_ray *ray, int color, t_data *data);
+void	draw_background(t_img *img, int color, t_data *data, char c);
 
 // /* player.c */
-// void	update_player(t_data *data);
+void	update_player(t_data *data);
 
 
 

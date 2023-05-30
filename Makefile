@@ -6,7 +6,7 @@
 #    By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/08 21:52:26 by abrisse           #+#    #+#              #
-#    Updated: 2023/05/29 21:56:13 by abrisse          ###   ########.fr        #
+#    Updated: 2023/05/30 11:55:11 by abrisse          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,11 +42,11 @@ SRC		=	main.c	\
 			check_description.c	\
 			check_map.c	\
 			error.c	\
-			events.c	\
 			game.c	\
 			get_map.c	\
 			init.c	\
 			parsing.c	\
+			player.c 	\
 			point.c		\
 			raycasting.c	\
 			ray_intercept.c	\
