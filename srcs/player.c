@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 19:14:21 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/30 10:59:02 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/30 12:23:41 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void	update_player(t_data *data)
 	int		distance_walk;
 	int		distance_side;
 
-	// data->player.rotation_angle += data->player.turn_direction
-	// 	* data->player.turn_speed;
+	data->player.rotation_angle += data->player.turn_direction
+		* data->player.turn_speed;
 	distance_walk = data->player.walk_direction * data->player.walk_speed;
 	new_x = data->player.coord.x + cos(data->player.rotation_angle)
 		* distance_walk;
