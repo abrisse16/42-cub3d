@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 13:23:02 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/31 17:49:04 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/06/01 00:49:24 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,48 +27,6 @@ void	render_background(t_data *data)
 	draw_color_rect(&data->graphic.game, &data->to_draw);
 }
 
-static void	render_wall(t_ray *ray, t_data *data)
-{
-	if (ray->was_hit_horizontal)
-	{
-		if (ray->is_facing_up)
-			ray->strip.color = 0x00FF00;
-		else
-			ray->strip.color = 0x0000FF;
-	}
-	else
-	{
-		if (ray->is_facing_left)
-			ray->strip.color = 0xFF0000;
-		else
-			ray->strip.color = 0xFFFF00;
-	}
-	draw_color_rect(&data->graphic.game, &ray->strip);
-}
-
-void	render_walls(t_data *data)
-{
-	int	x;
-
-	x = -1;
-	while (++x < data->num_rays)
-	{
-		data->rays[x].wall_distance = data->rays[x].hit_distance
-			* cos(data->rays[x].angle - data->player.angle);
-		data->rays[x].strip.height = (TILE_SIZE / data->rays[x].wall_distance)
-			* data->distance_projection;
-		if (data->rays[x].strip.height > data->graphic.win_height)
-			data->rays[x].strip.height = data->graphic.win_height;
-		data->rays[x].strip.y = (data->graphic.win_height / 2)
-			- (data->rays[x].strip.height / 2);
-		if (data->rays[x].strip.y < 0)
-			data->rays[x].strip.y = 0;
-		data->rays[x].strip.width = WALL_STRIP_WIDTH;
-		data->rays[x].strip.x = data->graphic.win_width - 1 - x
-			* WALL_STRIP_WIDTH;
-		render_wall(&data->rays[x], data);
-	}
-}
 
 void	render_player(t_data *data)
 {

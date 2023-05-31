@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 21:13:34 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/31 18:14:31 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/31 23:42:19 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,13 @@
 void	init_data(t_data *data)
 {
 	init_player(data);
-//	data->graphic.win_width = TILE_SIZE * data->map.width;
-//	data->graphic.win_height = TILE_SIZE * data->map.height;
-	data->graphic.win_width = 1920;
-	data->graphic.win_height = 1080;
 	data->map.map[(int)data->player.coord.y / TILE_SIZE]
 	[(int)data->player.coord.x / TILE_SIZE] = '0';
 	data->fov_angle = FOV_ANGLE * (M_PI / 180);
 	data->distance_projection = (data->graphic.win_width / 2)
 		/ tan(data->fov_angle / 2);
-	data->num_rays = data->graphic.win_width / WALL_STRIP_WIDTH;
-	data->display_mini_map = 1;
+
+	data->display_mini_map = 0;
 }
 
 int	init_img(void *mlx, t_img *img, int width, int height)
@@ -59,12 +55,17 @@ static int	init_texutres(t_data *data)
 
 int	init_graphic(t_data *data)
 {
-	data->rays = ft_malloc(sizeof(t_ray) * data->num_rays);
-	if (!data->rays)
-		return (ft_perror("malloc"));
 	data->graphic.mlx = mlx_init();
 	if (!data->graphic.mlx)
 		return (ft_error("mlx_init: Failed"));
+	mlx_get_screen_size(data->graphic.mlx, &data->graphic.win_width,
+		&data->graphic.win_height);
+	data->graphic.win_width = data->graphic.win_width * 0.8;
+	data->graphic.win_height = data->graphic.win_height * 0.8;
+	data->num_rays = data->graphic.win_width / WALL_STRIP_WIDTH;
+	data->rays = ft_malloc(sizeof(t_ray) * data->num_rays);
+	if (!data->rays)
+		return (ft_perror("malloc"));
 	if (init_texutres(data))
 		return (1);
 	data->graphic.win = mlx_new_window(data->graphic.mlx,
