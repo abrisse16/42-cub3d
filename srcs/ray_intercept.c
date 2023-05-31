@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 23:04:30 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/31 13:09:38 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/31 17:48:52 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static void	last_vertical_intercept(t_ray *ray, t_data *data)
 {
-	while (ray->intercept.x > 0 && ray->intercept.x < data->graphic.win_width
-		&& ray->intercept.x > 0 && ray->intercept.y < data->graphic.win_height)
+	while (ray->intercept.x > 0 && ray->intercept.x < data->map.width * TILE_SIZE
+		&& ray->intercept.x > 0 && ray->intercept.y < data->map.height * TILE_SIZE)
 	{
 		if (has_wall_at(data, ray->intercept.x - ray->is_facing_left,
 				ray->intercept.y))
@@ -52,8 +52,8 @@ void	vertical_intercept(t_ray *ray, t_data *data)
 
 static void	last_horizontal_intercept(t_ray *ray, t_data *data)
 {
-	while (ray->intercept.x > 0 && ray->intercept.x < data->graphic.win_width
-		&& ray->intercept.y > 0 && ray->intercept.y < data->graphic.win_height)
+	while (ray->intercept.x > 0 && ray->intercept.x < data->map.width * TILE_SIZE
+		&& ray->intercept.y > 0 && ray->intercept.y < data->map.height * TILE_SIZE)
 	{
 		if (has_wall_at(data, ray->intercept.x,
 				ray->intercept.y - ray->is_facing_up))

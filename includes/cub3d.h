@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:06:11 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/31 13:32:05 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/31 17:42:00 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 # include "mlx.h"
 
 # define FOV_ANGLE 60
-# define TILE_SIZE 32
+# define TILE_SIZE 64
 # define MINIMAP_SCALE_FACTOR 0.3
 # define RADIUS 4
 # define WALL_STRIP_WIDTH 1

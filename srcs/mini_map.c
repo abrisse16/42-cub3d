@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/31 13:13:45 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/31 13:14:00 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/31 17:47:41 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ static void	render_minimap_background(t_data *data)
 
 	to_draw.x = 0;
 	to_draw.y = 0;
-	to_draw.width = data->graphic.win_width * MINIMAP_SCALE_FACTOR;
-	to_draw.height = data->graphic.win_height * MINIMAP_SCALE_FACTOR;
+	to_draw.width = data->map.width * TILE_SIZE * MINIMAP_SCALE_FACTOR;
+	to_draw.height = data->map.height * TILE_SIZE * MINIMAP_SCALE_FACTOR;
 	to_draw.color = 0x202020;
 	draw_color_rect(&data->graphic.game, &to_draw);
 }

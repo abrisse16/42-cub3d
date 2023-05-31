@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 21:13:34 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/31 13:33:41 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/31 18:14:31 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,10 @@
 void	init_data(t_data *data)
 {
 	init_player(data);
-	data->graphic.win_width = TILE_SIZE * data->map.width;
-	data->graphic.win_height = TILE_SIZE * data->map.height;
+//	data->graphic.win_width = TILE_SIZE * data->map.width;
+//	data->graphic.win_height = TILE_SIZE * data->map.height;
+	data->graphic.win_width = 1920;
+	data->graphic.win_height = 1080;
 	data->map.map[(int)data->player.coord.y / TILE_SIZE]
 	[(int)data->player.coord.x / TILE_SIZE] = '0';
 	data->fov_angle = FOV_ANGLE * (M_PI / 180);
@@ -36,6 +38,25 @@ int	init_img(void *mlx, t_img *img, int width, int height)
 	return (0);
 }
 
+static int	get_texture(void *mlx, char *path, t_img *img)
+{
+	img->img = mlx_xpm_file_to_image(mlx, path, &img->width, &img->height);
+	if (!img->img)
+		return (ft_error("mlx_xpm_file_to_image: Failed"));
+	img->addr = mlx_get_data_addr(img->img, &img->bpp, &img->line_len, &img->endian);
+	return (0);
+}
+
+static int	init_texutres(t_data *data)
+{
+	if (get_texture(data->graphic.mlx, data->no, &data->graphic.north_texture)
+		|| get_texture(data->graphic.mlx, data->so, &data->graphic.south_texture)
+		|| get_texture(data->graphic.mlx, data->we, &data->graphic.west_texture)
+		|| get_texture(data->graphic.mlx, data->ea, &data->graphic.east_texture))
+		return (1);
+	return (0);
+}
+
 int	init_graphic(t_data *data)
 {
 	data->rays = ft_malloc(sizeof(t_ray) * data->num_rays);
@@ -44,7 +65,8 @@ int	init_graphic(t_data *data)
 	data->graphic.mlx = mlx_init();
 	if (!data->graphic.mlx)
 		return (ft_error("mlx_init: Failed"));
-	/* à ajouter : init_textures*/
+	if (init_texutres(data))
+		return (1);
 	data->graphic.win = mlx_new_window(data->graphic.mlx,
 			data->graphic.win_width, data->graphic.win_height, "cub3D");
 	if (!data->graphic.win)
@@ -54,5 +76,3 @@ int	init_graphic(t_data *data)
 		return (1);
 	return (0);
 }
-
-/* fonction à ajouter : init_texutres */

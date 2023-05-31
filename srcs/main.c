@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:04:05 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/31 12:57:05 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/31 18:09:35 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,14 @@ int	check_args(int ac, char **av)
 
 void	free_graphic(t_graphic *g)
 {
+	if (g->north_texture.img)
+		mlx_destroy_image(g->mlx, g->north_texture.img);
+	if (g->south_texture.img)
+		mlx_destroy_image(g->mlx, g->south_texture.img);
+	if (g->west_texture.img)
+		mlx_destroy_image(g->mlx, g->west_texture.img);
+	if (g->east_texture.img)
+		mlx_destroy_image(g->mlx, g->east_texture.img);
 	if (g->game.img)
 		mlx_destroy_image(g->mlx, g->game.img);
 	if (g->win)
