@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:06:11 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/31 00:34:25 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/31 13:32:05 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,14 @@
 # include "libft.h"
 # include "mlx.h"
 
-# define FOV_ANGLE 60					// field of view in degrees
-# define TILE_SIZE 64					// size of a tile in pixels
-# define MINIMAP_SCALE_FACTOR 0.3		// size of the minimap relative to the window
-# define RADIUS 4						// size of the player circle on the minimap
-# define WALL_STRIP_WIDTH 1				// width of a wall strip in pixels
-# define WALK_SPEED 2.0f				// walk speed in pixels per frame
-# define TURN_SPEED 2					// rotation speed in degrees per frame
+# define FOV_ANGLE 60
+# define TILE_SIZE 32
+# define MINIMAP_SCALE_FACTOR 0.3
+# define RADIUS 4
+# define WALL_STRIP_WIDTH 1
+# define WALK_SPEED 2.0f
+# define TURN_SPEED 2
 
-/* structure validée */
 typedef struct s_to_draw
 {
 	int		x;
@@ -43,7 +42,6 @@ typedef struct s_to_draw
 	int		color;
 }	t_to_draw;
 
-/* structure validée */
 typedef struct s_img
 {
 	void	*img;
@@ -55,14 +53,12 @@ typedef struct s_img
 	int		height;
 }	t_img;
 
-/* structure validée */
 typedef struct s_point
 {
 	float	x;
 	float	y;
 }	t_point;
 
-/* structure validée */
 typedef struct s_player
 {
 	t_point	coord;
@@ -80,19 +76,13 @@ typedef struct s_graphic
 	void	*win;
 	int		win_width;
 	int		win_height;
-	float	distance_projection;	// à déplacer dans data
 	t_img	game;
-	t_img	mini_map;
-
-	/* structure validée jusqu'ici */
-
-	t_img 	north_texture;
-	t_img 	south_texture;
-	t_img 	west_texture;
-	t_img 	east_texture;
+	t_img	north_texture;
+	t_img	south_texture;
+	t_img	west_texture;
+	t_img	east_texture;
 }	t_graphic;
 
-/* structure validée */
 typedef struct s_map
 {
 	char	**map;
@@ -103,23 +93,20 @@ typedef struct s_map
 
 typedef struct s_ray
 {
-	float	angle;
-	t_point	hit_coord;
-	float	hit_distance;
-	int		was_hit_horizontal;
-	int		is_facing_up;
-	int		is_facing_left;
-
-	int		horz_hit_found;
-	float	horz_hit_distance;
-	t_point horz_hit_coord;
-	int		vert_hit_found;
-	float	vert_hit_distance;
-	t_point vert_hit_coord;
-
-	t_point intercept;
-	t_point step;
-	
+	float		angle;
+	t_point		hit_coord;
+	float		hit_distance;
+	int			was_hit_horizontal;
+	int			is_facing_up;
+	int			is_facing_left;
+	int			horz_hit_found;
+	float		horz_hit_distance;
+	t_point		horz_hit_coord;
+	int			vert_hit_found;
+	float		vert_hit_distance;
+	t_point		vert_hit_coord;
+	t_point		intercept;
+	t_point		step;
 	float		wall_distance;
 	t_to_draw	strip;
 }	t_ray;
@@ -141,13 +128,12 @@ typedef struct s_data
 	int			num_rays;
 	int			display_mini_map;
 	t_to_draw	to_draw;
-//	float		distance_projection;
+	float		distance_projection;
 }	t_data;
 
-
-/* error.c : fichier validé */
-int	ft_error(char *str);
-int	ft_perror(char *str);
+/* error.c */
+int		ft_error(char *str);
+int		ft_perror(char *str);
 
 /* init.c */
 void	init_data(t_data *data);
@@ -157,28 +143,28 @@ int		init_graphic(t_data *data);
 void	start(t_data *data);
 int		has_wall_at(t_data *data, float x, float y);
 
-/* events.c : fichier validé */
-int	key_pressed(int key, t_data *data);
-int	key_released(int key, t_data *data);
-int	cross_pressed(t_data *data);
+/* events.c */
+int		key_pressed(int key, t_data *data);
+int		key_released(int key, t_data *data);
+int		cross_pressed(t_data *data);
 
-/* player.c : fichier validée */
+/* player.c */
 void	update_player(t_data *data);
 
-/* init_player.c : fichier validé */
+/* init_player.c */
 void	init_player(t_data *data);
 
-/* raycasting.c : fichier validé */
+/* raycasting.c */
 void	cast_all_rays(t_data *data);
 float	normalize_angle(float angle);
 
-/* ray_intercept.c : fichier validé */
+/* ray_intercept.c */
 void	horizontal_intercept(t_ray *ray, t_data *data);
 void	vertical_intercept(t_ray *ray, t_data *data);
 
 /* render.c */
 void	render_background(t_data *data);
-void	render_walls(t_data *data);		// pour l'instant affiche juste des couleurs, pas les textures
+void	render_walls(t_data *data);
 void	render_minimap(t_data *data);
 void	render_player(t_data *data);
 
@@ -189,13 +175,13 @@ void	draw_circle(t_img *img, t_point *center, int radius, int color);
 void	draw_ray(t_img *img, t_point *start, float angle, int distance);
 
 /* parsing.c */
-int	parsing(int fd, t_data *data);
+int		parsing(int fd, t_data *data);
 
 /* check_description.c */
-int	check_description(t_data *data);
+int		check_description(t_data *data);
 
 /* check_map.c */
-int	check_map(t_list **lst, t_data *data);
+int		check_map(t_list **lst, t_data *data);
 
 /* get_map.c */
 char	*line_no_space(char *line);

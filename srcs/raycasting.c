@@ -6,14 +6,13 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 20:03:55 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/30 22:21:06 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/31 13:11:02 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-/* fonction validée */
-float normalize_angle(float angle)
+float	normalize_angle(float angle)
 {
 	angle = remainder(angle, 2 * M_PI);
 	if (angle < 0)
@@ -21,27 +20,29 @@ float normalize_angle(float angle)
 	return (angle);
 }
 
-/* fonction validée */
 static void	get_shorter_distance(t_ray *ray, t_data *data)
 {
 	if (ray->horz_hit_found)
-		ray->horz_hit_distance = distance(data->player.coord, ray->horz_hit_coord);
+		ray->horz_hit_distance = distance(data->player.coord,
+				ray->horz_hit_coord);
 	if (ray->vert_hit_found)
-		ray->vert_hit_distance = distance(data->player.coord, ray->vert_hit_coord);
+		ray->vert_hit_distance = distance(data->player.coord,
+				ray->vert_hit_coord);
 	if (ray->horz_hit_distance < ray->vert_hit_distance)
 	{
-		set_point(&ray->hit_coord, ray->horz_hit_coord.x, ray->horz_hit_coord.y);
+		set_point(&ray->hit_coord, ray->horz_hit_coord.x,
+			ray->horz_hit_coord.y);
 		ray->hit_distance = ray->horz_hit_distance;
 		ray->was_hit_horizontal = 1;
 	}
 	else
 	{
-		set_point(&ray->hit_coord, ray->vert_hit_coord.x, ray->vert_hit_coord.y);
+		set_point(&ray->hit_coord, ray->vert_hit_coord.x,
+			ray->vert_hit_coord.y);
 		ray->hit_distance = ray->vert_hit_distance;
 	}
 }
 
-/* fonction validée */
 static void	create_ray(t_ray *ray)
 {
 	ray->was_hit_horizontal = 0;
@@ -63,8 +64,7 @@ static void	create_ray(t_ray *ray)
 		ray->is_facing_left = 1;
 }
 
-/* fonction validée */
-static void cast_ray(t_ray *ray, t_data *data)
+static void	cast_ray(t_ray *ray, t_data *data)
 {
 	create_ray(ray);
 	horizontal_intercept(ray, data);
@@ -72,12 +72,11 @@ static void cast_ray(t_ray *ray, t_data *data)
 	get_shorter_distance(ray, data);
 }
 
-/* fonction validée */
 void	cast_all_rays(t_data *data)
 {
 	int		i;
 	float	ray_angle;
-	
+
 	i = -1;
 	ray_angle = data->player.angle - (data->fov_angle / 2);
 	while (++i < data->num_rays)

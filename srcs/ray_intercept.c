@@ -6,19 +6,19 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 23:04:30 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/30 22:14:04 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/31 13:09:38 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-/* fonction validée */
 static void	last_vertical_intercept(t_ray *ray, t_data *data)
 {
 	while (ray->intercept.x > 0 && ray->intercept.x < data->graphic.win_width
 		&& ray->intercept.x > 0 && ray->intercept.y < data->graphic.win_height)
 	{
-		if (has_wall_at(data, ray->intercept.x - ray->is_facing_left, ray->intercept.y))
+		if (has_wall_at(data, ray->intercept.x - ray->is_facing_left,
+				ray->intercept.y))
 		{
 			ray->vert_hit_found = 1;
 			set_point(&ray->vert_hit_coord, ray->intercept.x, ray->intercept.y);
@@ -32,7 +32,6 @@ static void	last_vertical_intercept(t_ray *ray, t_data *data)
 	}
 }
 
-/* fonction validée */
 void	vertical_intercept(t_ray *ray, t_data *data)
 {
 	ray->intercept.x = floor(data->player.coord.x / TILE_SIZE) * TILE_SIZE;
@@ -51,13 +50,13 @@ void	vertical_intercept(t_ray *ray, t_data *data)
 	last_vertical_intercept(ray, data);
 }
 
-/* fonction validée */
 static void	last_horizontal_intercept(t_ray *ray, t_data *data)
 {
 	while (ray->intercept.x > 0 && ray->intercept.x < data->graphic.win_width
 		&& ray->intercept.y > 0 && ray->intercept.y < data->graphic.win_height)
 	{
-		if (has_wall_at(data, ray->intercept.x, ray->intercept.y - ray->is_facing_up))
+		if (has_wall_at(data, ray->intercept.x,
+				ray->intercept.y - ray->is_facing_up))
 		{
 			ray->horz_hit_found = 1;
 			set_point(&ray->horz_hit_coord, ray->intercept.x, ray->intercept.y);
@@ -71,7 +70,6 @@ static void	last_horizontal_intercept(t_ray *ray, t_data *data)
 	}
 }
 
-/* fonction validée */
 void	horizontal_intercept(t_ray *ray, t_data *data)
 {
 	ray->intercept.y = floor(data->player.coord.y / TILE_SIZE) * TILE_SIZE;

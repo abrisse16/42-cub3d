@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:04:05 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/30 20:32:29 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/31 12:57:05 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ int	check_args(int ac, char **av)
 
 void	free_graphic(t_graphic *g)
 {
-	if (g->mini_map.img)
-		mlx_destroy_image(g->mlx, g->mini_map.img);
 	if (g->game.img)
 		mlx_destroy_image(g->mlx, g->game.img);
 	if (g->win)

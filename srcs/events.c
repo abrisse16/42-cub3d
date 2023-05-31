@@ -6,13 +6,12 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 20:35:01 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/30 20:41:47 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/31 12:48:48 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-/* fonction validée */
 int	key_pressed(int key, t_data *data)
 {
 	if (key == XK_Escape)
@@ -34,7 +33,6 @@ int	key_pressed(int key, t_data *data)
 	return (0);
 }
 
-/* fonction validée */
 int	key_released(int key, t_data *data)
 {
 	if (key == XK_w || key == XK_W)
@@ -52,7 +50,6 @@ int	key_released(int key, t_data *data)
 	return (0);
 }
 
-/* fonction validée */
 int	cross_pressed(t_data *data)
 {
 	mlx_loop_end(data->graphic.mlx);

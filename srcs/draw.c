@@ -6,13 +6,12 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 13:25:43 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/31 00:33:34 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/31 12:48:29 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-/* fonction validée */
 void	my_mlx_pixel_put(t_img *img, int x, int y, int color)
 {
 	char	*dst;
@@ -21,28 +20,27 @@ void	my_mlx_pixel_put(t_img *img, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-/* foncton validée */
 void	draw_color_rect(t_img *img, t_to_draw *to_draw)
 {
 	int	x;
 	int	y;
-	
+
 	y = -1;
 	while (++y < to_draw->height)
 	{
 		x = -1;
 		while (++x < to_draw->width)
-			my_mlx_pixel_put(img, to_draw->x + x, to_draw->y + y, to_draw->color);
+			my_mlx_pixel_put(img, to_draw->x + x, to_draw->y + y,
+				to_draw->color);
 	}
 }
-
 
 void	draw_ray(t_img *img, t_point *start, float angle, int distance)
 {
 	int	i;
 	int	x;
 	int	y;
-	
+
 	i = -1;
 	while (++i < distance * MINIMAP_SCALE_FACTOR)
 	{
@@ -52,7 +50,6 @@ void	draw_ray(t_img *img, t_point *start, float angle, int distance)
 	}
 }
 
-/* Fonction validée (peut etre juste gérer quand ça sort) */
 void	draw_circle(t_img *img, t_point *center, int radius, int color)
 {
 	int	pos_x;

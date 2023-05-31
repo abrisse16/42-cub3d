@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 19:32:51 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/30 10:57:29 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/31 12:46:57 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ static int	check_rgb(int *colors)
 	}
 	return (0);
 }
-
 
 int	check_description(t_data *data)
 {
