@@ -6,7 +6,11 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 13:23:02 by abrisse           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/05/31 20:42:28 by abrisse          ###   ########.fr       */
+=======
+/*   Updated: 2023/06/01 00:49:24 by abrisse          ###   ########.fr       */
+>>>>>>> add-texture
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +31,7 @@ void	render_background(t_data *data)
 	draw_color_rect(&data->graphic.game, &data->to_draw);
 }
 
+<<<<<<< HEAD
 static void	render_wall(t_ray *ray, t_data *data)
 {
 	int texture_x;
@@ -97,6 +102,8 @@ void	render_walls(t_data *data)
 		render_wall(&data->rays[x], data);
 	}
 }
+=======
+>>>>>>> add-texture
 
 void	render_player(t_data *data)
 {
