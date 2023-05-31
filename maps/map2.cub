@@ -1,6 +1,6 @@
-NO ./assets/walls/blue_wall_01.xpm
+NO ./assets/walls/iron_wall_07.xpm
 SO ./assets/walls/blue_wall_02.xpm
-WE ./assets/walls/blue_wall_02.xpm
+WE ./assets/walls/stone_wall_02.xpm
 EA ./assets/walls/blue_wall_01.xpm
 
 F 188,56,123

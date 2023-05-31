@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 13:23:02 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/31 17:49:04 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/31 20:42:28 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,21 +29,49 @@ void	render_background(t_data *data)
 
 static void	render_wall(t_ray *ray, t_data *data)
 {
+	int texture_x;
+	int texture_y;
+	int i;
+	int top_distance;
+	
 	if (ray->was_hit_horizontal)
-	{
-		if (ray->is_facing_up)
-			ray->strip.color = 0x00FF00;
-		else
-			ray->strip.color = 0x0000FF;
-	}
+		texture_x = (int)ray->hit_coord.x % TILE_SIZE;
 	else
+		texture_x = (int)ray->hit_coord.y % TILE_SIZE;
+	top_distance = (int)ray->strip.y - 1 + (int)ray->strip.height / 2 - (int)data->graphic.win_height / 2;
+	
+	i = -1;
+	while (++i < ray->strip.height)
 	{
-		if (ray->is_facing_left)
-			ray->strip.color = 0xFF0000;
+	
+		if (ray->was_hit_horizontal)
+		{
+			if (ray->is_facing_up)
+			{
+				texture_y = top_distance * ((float)data->graphic.north_texture.height / ray->strip.height) + i;
+				ray->strip.color = *(int*)(data->graphic.north_texture.addr + ((data->graphic.north_texture.bpp / 8) * texture_x + texture_y * data->graphic.north_texture.line_len));
+			}
+			else
+			{
+				texture_y = top_distance * ((float)data->graphic.south_texture.height / ray->strip.height) + i;
+				ray->strip.color = *(int*)(data->graphic.south_texture.addr + ((data->graphic.south_texture.bpp / 8) * texture_x + texture_y * data->graphic.south_texture.line_len));
+			}
+		}
 		else
-			ray->strip.color = 0xFFFF00;
+		{
+			if (ray->is_facing_left)
+			{
+				texture_y = top_distance * ((float)data->graphic.west_texture.height / ray->strip.height) + i;
+				ray->strip.color = *(int*)(data->graphic.west_texture.addr + ((data->graphic.west_texture.bpp / 8) * texture_x + texture_y * data->graphic.west_texture.line_len));
+			}
+			else
+			{
+				texture_y = top_distance * ((float)data->graphic.east_texture.height / ray->strip.height) + i;
+				ray->strip.color = *(int*)(data->graphic.east_texture.addr + ((data->graphic.east_texture.bpp / 8) * texture_x + texture_y * data->graphic.east_texture.line_len));
+			}
+		}
+		my_mlx_pixel_put(data->graphic.game.img, ray->strip.x, ray->strip.y + i, ray->strip.color);
 	}
-	draw_color_rect(&data->graphic.game, &ray->strip);
 }
 
 void	render_walls(t_data *data)

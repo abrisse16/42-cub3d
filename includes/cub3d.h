@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:06:11 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/31 17:42:00 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/31 19:15:08 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,8 @@ void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
 void	draw_color_rect(t_img *img, t_to_draw *to_draw);
 void	draw_circle(t_img *img, t_point *center, int radius, int color);
 void	draw_ray(t_img *img, t_point *start, float angle, int distance);
+//void	draw_texture_rect(t_img *img, t_to_draw *to_draw, t_img *texture);
+
 
 /* parsing.c */
 int		parsing(int fd, t_data *data);

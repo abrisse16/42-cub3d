@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 13:25:43 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/31 12:48:29 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/31 20:09:03 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,21 @@ void	my_mlx_pixel_put(t_img *img, int x, int y, int color)
 	dst = img->addr + (y * img->line_len + x * (img->bpp / 8));
 	*(unsigned int *)dst = color;
 }
+
+// void	draw_texture_rect(t_img *img, t_to_draw *to_draw, t_img *texture)
+// {
+// 	int	x;
+// 	int	y;
+
+// 	y = -1;
+// 	while (++y < to_draw->height)
+// 	{
+// 		x = -1;
+// 		while (++x < to_draw->width)
+// 			my_mlx_pixel_put(img, to_draw->x + x, to_draw->y + y,
+// 				retrieve_texture_pixel(texture, x, y));
+// 	}
+// }
 
 void	draw_color_rect(t_img *img, t_to_draw *to_draw)
 {
