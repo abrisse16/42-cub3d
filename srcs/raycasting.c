@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 20:03:55 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/31 13:11:02 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/05/31 18:33:02 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,8 @@ void	cast_all_rays(t_data *data)
 	ray_angle = data->player.angle - (data->fov_angle / 2);
 	while (++i < data->num_rays)
 	{
+		ray_angle = data->player.angle + atan((i - data->num_rays / 2) / data->distance_projection);
 		data->rays[i].angle = normalize_angle(ray_angle);
 		cast_ray(&data->rays[i], data);
-		ray_angle += data->fov_angle / data->num_rays;
 	}
 }
