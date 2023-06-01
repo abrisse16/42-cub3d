@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 00:48:54 by abrisse           #+#    #+#             */
-/*   Updated: 2023/06/01 00:49:45 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/06/01 08:48:58 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,18 +30,18 @@ static t_img	get_texture_to_render(t_ray *ray, t_data *data)
 	}
 }
 
-static t_to_draw	get_texture_data(t_data *data, int x)
+static t_texture_data	get_texture_data(t_data *data, int x)
 {
-	t_to_draw	texture_data;
+	t_texture_data	texture_data;
 
-	texture_data.x = x * WALL_STRIP_WIDTH;
-	texture_data.y = (data->graphic.win_height / 2)
-		- (data->rays[x].strip.height / 2);
-	if (texture_data.y < 0)
-		texture_data.y = 0;
+	texture_data.offset_x = x * WALL_STRIP_WIDTH;
+	texture_data.offset_y = (data->graphic.win_height / 2)
+		- ((int)data->rays[x].projected_height / 2);
+	if (texture_data.offset_y < 0)
+		texture_data.offset_y = 0;
 	texture_data.width = WALL_STRIP_WIDTH;
-	texture_data.height = data->graphic.win_height / 2
-		+ data->rays[x].strip.height / 2;
+	texture_data.height = (data->graphic.win_height / 2)
+		+ ((int)data->rays[x].projected_height / 2);
 	if (texture_data.height > data->graphic.win_height)
 		texture_data.height = data->graphic.win_height;
 	return (texture_data);
@@ -67,22 +67,22 @@ static int	get_pixel_color(t_img texture, t_ray *ray, t_data *data, int y)
 
 void	render_walls(t_data *data)
 {
-	int			x;
-	int			y;
-	int			pos_x;
-	t_to_draw	texture_data;
-	t_img		texture_to_render;
+	int				x;
+	int				y;
+	int				pos_x;
+	t_texture_data	texture_data;
+	t_img			texture_to_render;
 
 	x = -1;
 	while (++x < data->num_rays)
 	{
 		data->rays[x].wall_distance = data->rays[x].hit_distance
 			* cos(data->rays[x].angle - data->player.angle);
-		data->rays[x].strip.height = (TILE_SIZE / data->rays[x].wall_distance)
+		data->rays[x].projected_height = (TILE_SIZE / data->rays[x].wall_distance)
 			* data->distance_projection;
 		texture_data = get_texture_data(data, x);
 		texture_to_render = get_texture_to_render(&data->rays[x], data);
-		y = texture_data.y - 1;
+		y = texture_data.offset_y - 1; // peut être - 1
 		while (++y < texture_data.height)
 		{
 			pos_x = data->graphic.win_width - x - 1;

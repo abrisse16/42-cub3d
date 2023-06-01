@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:06:11 by abrisse           #+#    #+#             */
-/*   Updated: 2023/06/01 00:56:25 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/06/01 08:51:31 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,17 @@ typedef struct s_to_draw
 	int		height;
 	int		color;
 }	t_to_draw;
+
+typedef struct s_texture_data
+{
+	int			offset_x;
+	int			offset_y;
+	int			width;
+	int			height;
+	uint32_t	color;
+	u_int32_t	color_y;
+	u_int32_t	color_x;
+}	t_texture_data;
 
 typedef struct s_img
 {
@@ -108,6 +119,7 @@ typedef struct s_ray
 	t_point		intercept;
 	t_point		step;
 	float		wall_distance;
+	float		projected_height;
 	t_to_draw	strip;
 }	t_ray;
 
