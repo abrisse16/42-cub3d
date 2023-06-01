@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 00:48:54 by abrisse           #+#    #+#             */
-/*   Updated: 2023/06/01 08:48:58 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/06/01 18:48:17 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,31 +47,25 @@ static t_texture_data	get_texture_data(t_data *data, int x)
 	return (texture_data);
 }
 
-static int	get_pixel_color(t_img texture, t_ray *ray, t_data *data, int y)
+static void	get_color(t_ray *ray, t_texture_data *texture_data, t_data *data, int y)
 {
-	int	color_x;
-	int	color_y;
-	int	color;
-	int	top_distance;
-
+	int				distance_from_top;
+	
 	if (ray->was_hit_horizontal)
-		color_x = (int)ray->hit_coord.x % TILE_SIZE;
+		texture_data->color_x = (int)ray->hit_coord.x % TILE_SIZE;
 	else
-		color_x = (int)ray->hit_coord.y % TILE_SIZE;
-	top_distance = y + (int)(ray->strip.height / 2)
-		- (data->graphic.win_height / 2);
-	color_y = top_distance * (float)TILE_SIZE / (int)ray->strip.height;
-	color = texture.addr[color_y * texture.line_len + color_x];
-	return (color);
+		texture_data->color_x = (int)ray->hit_coord.y % TILE_SIZE;
+	distance_from_top = y + ((int)ray->projected_height / 2) - (data->graphic.win_height / 2);
+	texture_data->color_y = distance_from_top * ((float)TILE_SIZE / (int)ray->projected_height);
 }
 
 void	render_walls(t_data *data)
 {
 	int				x;
 	int				y;
-	int				pos_x;
 	t_texture_data	texture_data;
 	t_img			texture_to_render;
+	uint32_t		color;
 
 	x = -1;
 	while (++x < data->num_rays)
@@ -82,13 +76,13 @@ void	render_walls(t_data *data)
 			* data->distance_projection;
 		texture_data = get_texture_data(data, x);
 		texture_to_render = get_texture_to_render(&data->rays[x], data);
-		y = texture_data.offset_y - 1; // peut être - 1
+		y = texture_data.offset_y - 1;
 		while (++y < texture_data.height)
 		{
-			pos_x = data->graphic.win_width - x - 1;
-			texture_data.color = get_pixel_color(texture_to_render,
-				&data->rays[x], data, y);
-			my_mlx_pixel_put(&data->graphic.game, pos_x, y, texture_data.color);
+	//		pos_x = data->graphic.win_width - x - 1;
+			get_color(&data->rays[x], &texture_data, data, y);
+			color = (uint32_t)*(texture_to_render.addr + (texture_data.color_x + texture_data.color_y * texture_to_render.line_len));	
+			my_mlx_pixel_put(&data->graphic.game, x, y, color);
 		}
 	}
 }

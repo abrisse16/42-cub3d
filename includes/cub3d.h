@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:06:11 by abrisse           #+#    #+#             */
-/*   Updated: 2023/06/01 08:51:31 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/06/01 18:46:07 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <X11/keysym.h>
 # include <limits.h>
 # include <float.h>
+#include <stdint.h>
 
 # include "libft.h"
 # include "mlx.h"
