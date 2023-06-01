@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 00:48:54 by abrisse           #+#    #+#             */
-/*   Updated: 2023/06/01 18:48:17 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/06/01 18:52:27 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	render_walls(t_data *data)
 	int				y;
 	t_texture_data	texture_data;
 	t_img			texture_to_render;
-	uint32_t		color;
+	int		color;
 
 	x = -1;
 	while (++x < data->num_rays)
@@ -81,7 +81,7 @@ void	render_walls(t_data *data)
 		{
 	//		pos_x = data->graphic.win_width - x - 1;
 			get_color(&data->rays[x], &texture_data, data, y);
-			color = (uint32_t)*(texture_to_render.addr + (texture_data.color_x + texture_data.color_y * texture_to_render.line_len));	
+			color = *(texture_to_render.addr + (texture_data.color_x + texture_data.color_y * texture_to_render.line_len));	
 			my_mlx_pixel_put(&data->graphic.game, x, y, color);
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:06:11 by abrisse           #+#    #+#             */
-/*   Updated: 2023/06/01 18:46:07 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/06/01 18:53:40 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ typedef struct s_texture_data
 	int			offset_y;
 	int			width;
 	int			height;
-	uint32_t	color;
-	u_int32_t	color_y;
-	u_int32_t	color_x;
+	int	color;
+	int	color_y;
+	int	color_x;
 }	t_texture_data;
 
 typedef struct s_img
