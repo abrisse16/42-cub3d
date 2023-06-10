@@ -5,4 +5,5 @@ deps/*
 *.o
 *.d
 libs/*.a
-cub3d
+libs/*/*.a
+cub3D
