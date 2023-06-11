@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:06:11 by abrisse           #+#    #+#             */
-/*   Updated: 2023/06/01 18:53:40 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/06/11 16:02:49 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@
 
 # define FOV_ANGLE 60
 # define TILE_SIZE 64
-# define MINIMAP_SCALE_FACTOR 0.3
-# define RADIUS 4
+# define MINIMAP_SCALE_FACTOR 0.2
+# define RADIUS 2
 # define WALL_STRIP_WIDTH 1
 # define WALK_SPEED 2.0f
 # define TURN_SPEED 2
@@ -82,7 +82,7 @@ typedef struct s_player
 	float	walk_speed;
 }	t_player;
 
-typedef struct s_graphic
+typedef struct s_graph
 {
 	void	*mlx;
 	void	*win;
@@ -93,7 +93,7 @@ typedef struct s_graphic
 	t_img	south_texture;
 	t_img	west_texture;
 	t_img	east_texture;
-}	t_graphic;
+}	t_graph;
 
 typedef struct s_map
 {
@@ -117,17 +117,19 @@ typedef struct s_ray
 	int			vert_hit_found;
 	float		vert_hit_distance;
 	t_point		vert_hit_coord;
-	t_point		intercept;
+	t_point		inter;
 	t_point		step;
 	float		wall_distance;
 	float		projected_height;
 	t_to_draw	strip;
+	int			distance_from_top;
+	int			y;
 }	t_ray;
 
 typedef struct s_data
 {
 	t_map		map;
-	t_graphic	graphic;
+	t_graph	graph;
 	t_player	player;
 	t_ray		*rays;
 	char		*no;
@@ -142,6 +144,7 @@ typedef struct s_data
 	int			display_mini_map;
 	t_to_draw	to_draw;
 	float		distance_projection;
+	float		fact;
 }	t_data;
 
 /* error.c */
@@ -150,7 +153,7 @@ int		ft_perror(char *str);
 
 /* init.c */
 void	init_data(t_data *data);
-int		init_graphic(t_data *data);
+int		init_graph(t_data *data);
 
 /* game.c */
 void	start(t_data *data);
@@ -184,8 +187,8 @@ void	render_player(t_data *data);
 /* draw.c */
 void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
 void	draw_color_rect(t_img *img, t_to_draw *to_draw);
-void	draw_circle(t_img *img, t_point *center, int radius, int color);
-void	draw_ray(t_img *img, t_point *start, float angle, int distance);
+void	draw_circle(t_img *img, t_point *center, int color, t_data *data);
+void	draw_ray(t_img *img, t_point *start, t_ray *ray, t_data *data);
 //void	draw_texture_rect(t_img *img, t_to_draw *to_draw, t_img *texture);
 
 
@@ -206,5 +209,11 @@ int		create_map(t_list *lst, t_data *data);
 void	set_point(t_point *point, double x, double y);
 double	distance(t_point a, t_point b);
 t_point	create_point(double x, double y);
+
+/* get_color.c */
+void	get_color_x(t_ray *ray, t_texture_data *texture_data, t_img texture);
+void	get_color_y(t_ray *ray, t_data *data, t_texture_data *texture_data,
+			t_img texture);
+int	get_color(t_texture_data *texture_data, t_img texture);
 
 #endif

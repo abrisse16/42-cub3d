@@ -6,7 +6,7 @@
 #    By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/08 21:52:26 by abrisse           #+#    #+#              #
-#    Updated: 2023/06/01 00:50:36 by abrisse          ###   ########.fr        #
+#    Updated: 2023/06/11 16:03:03 by abrisse          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,10 +52,10 @@ SRC		=	main.c				\
 			ray_intercept.c		\
 			draw.c				\
 			render.c			\
-			init_player.c		\
 			events.c			\
 			mini_map.c			\
-			render_walls.c
+			render_walls.c		\
+			get_color.c
 DEP		=	$(addprefix $(DEP_PATH), $(SRC:.c=.d))
 OBJ		=	$(addprefix $(OBJ_PATH), $(SRC:.c=.o))
 

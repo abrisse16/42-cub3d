@@ -6,13 +6,13 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:04:05 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/31 23:10:14 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/06/11 02:41:27 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	check_args(int ac, char **av)
+static int	check_args(int ac, char **av)
 {
 	char	*str;
 
@@ -24,7 +24,7 @@ int	check_args(int ac, char **av)
 	return (0);
 }
 
-void	free_graphic(t_graphic *g)
+void	free_all(t_graph *g)
 {
 	if (g->north_texture.img)
 		mlx_destroy_image(g->mlx, g->north_texture.img);
@@ -43,6 +43,7 @@ void	free_graphic(t_graphic *g)
 		mlx_destroy_display(g->mlx);
 		free(g->mlx);
 	}
+	ft_clean_memory();
 }
 
 int	main(int ac, char **av)
@@ -63,14 +64,13 @@ int	main(int ac, char **av)
 		return (1);
 	}
 	close(fd);
-	if (init_graphic(&data))
+	if (init_graph(&data))
 	{
-		ft_clean_memory();
+		free_all(&data.graph);
 		return (1);
 	}
 	init_data(&data);
 	start(&data);
-	free_graphic(&data.graphic);
-	ft_clean_memory();
+	free_all(&data.graph);
 	return (0);
 }

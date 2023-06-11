@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 19:13:25 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/30 10:58:56 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/06/11 16:03:52 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	get_texture_path(char *line, char **target, t_data *data)
 	return (0);
 }
 
-static int	get_color(char *line, int *target, t_data *data)
+static int	get_color_value(char *line, int *target, t_data *data)
 {
 	char	**new;
 
@@ -49,9 +49,9 @@ static int	get_data(char *line, t_data *data)
 	else if (ft_strncmp(line, "EA ", 3) == 0)
 		return (get_texture_path(line, &data->ea, data));
 	else if (ft_strncmp(line, "C ", 2) == 0)
-		return (get_color(line, data->celling, data));
+		return (get_color_value(line, data->celling, data));
 	else if (ft_strncmp(line, "F ", 2) == 0)
-		return (get_color(line, data->floor, data));
+		return (get_color_value(line, data->floor, data));
 	return (ft_error("Invalid data in the file"));
 }
 

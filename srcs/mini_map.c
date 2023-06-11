@@ -6,22 +6,34 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/31 13:13:45 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/31 17:47:41 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/06/11 02:41:27 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static void	render_minimap_background(t_data *data)
+static float	render_minimap_background(t_data *data)
 {
 	t_to_draw	to_draw;
+	float		fact;
 
 	to_draw.x = 0;
 	to_draw.y = 0;
-	to_draw.width = data->map.width * TILE_SIZE * MINIMAP_SCALE_FACTOR;
-	to_draw.height = data->map.height * TILE_SIZE * MINIMAP_SCALE_FACTOR;
+	fact = 1;
+	to_draw.width = data->map.width * TILE_SIZE * MINIMAP_SCALE_FACTOR * fact;
+	to_draw.height = data->map.height * TILE_SIZE * MINIMAP_SCALE_FACTOR * fact;
+	while (to_draw.width > data->graph.win_width
+		|| to_draw.height > data->graph.win_height)
+	{
+		fact -= 0.1;
+		to_draw.width = data->map.width * TILE_SIZE * MINIMAP_SCALE_FACTOR
+			* fact;
+		to_draw.height = data->map.height * TILE_SIZE * MINIMAP_SCALE_FACTOR
+			* fact;
+	}
 	to_draw.color = 0x202020;
-	draw_color_rect(&data->graphic.game, &to_draw);
+	draw_color_rect(&data->graph.game, &to_draw);
+	return (fact);
 }
 
 void	render_minimap(t_data *data)
@@ -29,22 +41,24 @@ void	render_minimap(t_data *data)
 	int			x;
 	int			y;
 	t_to_draw	to_draw;
+	float		fact;
 
-	render_minimap_background(data);
-	to_draw.width = TILE_SIZE * MINIMAP_SCALE_FACTOR + 1;
-	to_draw.height = TILE_SIZE * MINIMAP_SCALE_FACTOR + 1;
+	fact = render_minimap_background(data);
+	data->fact = fact;
+	to_draw.width = TILE_SIZE * MINIMAP_SCALE_FACTOR * fact + 1;
+	to_draw.height = TILE_SIZE * MINIMAP_SCALE_FACTOR * fact + 1;
 	y = -1;
 	while (data->map.map[++y])
 	{
 		x = -1;
 		while (data->map.map[y][++x])
 		{
-			to_draw.x = x * TILE_SIZE * MINIMAP_SCALE_FACTOR;
-			to_draw.y = y * TILE_SIZE * MINIMAP_SCALE_FACTOR;
+			to_draw.x = x * TILE_SIZE * MINIMAP_SCALE_FACTOR * fact;
+			to_draw.y = y * TILE_SIZE * MINIMAP_SCALE_FACTOR * fact;
 			if (ft_strchr("0NSWE", data->map.map[y][x]))
 			{
 				to_draw.color = 0xFFFFFF;
-				draw_color_rect(&data->graphic.game, &to_draw);
+				draw_color_rect(&data->graph.game, &to_draw);
 			}
 		}
 	}

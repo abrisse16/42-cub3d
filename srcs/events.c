@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 20:35:01 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/31 12:48:48 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/06/11 02:41:27 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	key_pressed(int key, t_data *data)
 {
 	if (key == XK_Escape)
-		mlx_loop_end(data->graphic.mlx);
+		mlx_loop_end(data->graph.mlx);
 	else if (key == XK_w || key == XK_W)
 		data->player.walk_direction = 1;
 	else if (key == XK_s || key == XK_S)
@@ -52,6 +52,6 @@ int	key_released(int key, t_data *data)
 
 int	cross_pressed(t_data *data)
 {
-	mlx_loop_end(data->graphic.mlx);
+	mlx_loop_end(data->graph.mlx);
 	return (0);
 }

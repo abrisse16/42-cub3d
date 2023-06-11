@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 21:34:57 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/29 13:26:51 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/06/11 02:00:39 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static int	check_char(t_data *data)
 
 static int	check_error(char **map, int i, int j, t_data *data)
 {
-	if (i + 1 >= data->map.height)
+	if (i + 1 >= data->map.height || i == 0 || j == 0)
 		return (1);
 	if (ft_strchr("0NSEW", map[i - 1][j]) == NULL && map[i - 1][j] != '1')
 		return (1);
@@ -97,6 +97,23 @@ static int	check_walls(char **map, t_data *data)
 	}
 	return (0);
 }
+
+// static void change_space(char **map)
+// {
+// 	int	y;
+// 	int	x;
+
+// 	y = -1;
+// 	while (map[++y])
+// 	{
+// 		x = -1;
+// 		while (map[y][++x])
+// 		{
+// 			if (map[y][x] == ' ')
+// 				map[y][x] = '1';
+// 		}
+// 	}
+// }
 
 int	check_map(t_list **lst, t_data *data)
 {
