@@ -6,34 +6,11 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 21:34:57 by abrisse           #+#    #+#             */
-/*   Updated: 2023/06/11 02:00:39 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/06/11 23:41:53 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-static int	check_empty_lines(t_list **lst)
-{
-	char	*line;
-	t_list	*copy;
-
-	line = (char *)(*lst)->content;
-	while (ft_strncmp(line_no_space(line), "\n", 1) == 0)
-	{
-		(*lst) = (*lst)->next;
-		if (*lst == NULL)
-			return (ft_error("Invalid file (map is missing)"));
-		line = (char *)(*lst)->content;
-	}
-	copy = *lst;
-	while (copy)
-	{
-		if (ft_strncmp(line_no_space((char *)copy->content), "\n", 1) == 0)
-			return (ft_error("Invalid file"));
-		copy = copy->next;
-	}
-	return (0);
-}
 
 static int	check_char(t_data *data)
 {
@@ -48,7 +25,7 @@ static int	check_char(t_data *data)
 		while (data->map.map[y][++x])
 		{
 			if (ft_strchr("01NSEW \n", data->map.map[y][x]) == NULL)
-				return (ft_error("Wrong character in the map"));
+				return (ft_error("Invalid character in the map"));
 			if (ft_strchr("NSEW", data->map.map[y][x]) && data->map.dir == 'x')
 			{
 				data->map.dir = data->map.map[y][x];
@@ -56,11 +33,11 @@ static int	check_char(t_data *data)
 				data->player.coord.y = TILE_SIZE * y + TILE_SIZE / 2;
 			}
 			else if (ft_strchr("NSEW", data->map.map[y][x]))
-				return (ft_error("The map contain multiple starting position"));
+				return (ft_error("Map contain multiple starting position"));
 		}
 	}
 	if (data->map.dir == 'x')
-		return (ft_error("No starting position"));
+		return (ft_error("Missing starting position"));
 	return (0);
 }
 
@@ -97,23 +74,6 @@ static int	check_walls(char **map, t_data *data)
 	}
 	return (0);
 }
-
-// static void change_space(char **map)
-// {
-// 	int	y;
-// 	int	x;
-
-// 	y = -1;
-// 	while (map[++y])
-// 	{
-// 		x = -1;
-// 		while (map[y][++x])
-// 		{
-// 			if (map[y][x] == ' ')
-// 				map[y][x] = '1';
-// 		}
-// 	}
-// }
 
 int	check_map(t_list **lst, t_data *data)
 {

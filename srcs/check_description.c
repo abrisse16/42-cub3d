@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 19:32:51 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/31 12:46:57 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/06/11 20:10:15 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,7 @@ int	check_description(t_data *data)
 				"Path to the east texture is missing or invalid format file"));
 	if (check_rgb(data->celling))
 		return (ft_error("Color of the celling is not in the RGB range"));
+	if (check_rgb(data->floor))
+		return (ft_error("Color of the floor is not in the RGB range"));
 	return (0);
 }

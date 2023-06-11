@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 15:00:53 by abrisse           #+#    #+#             */
-/*   Updated: 2023/05/30 20:02:10 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/06/11 20:01:15 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,13 @@ int	ft_perror(char *str)
 {
 	ft_putendl_fd("Error", 1);
 	perror(str);
+	return (1);
+}
+
+int	ft_perror_clean(char *str)
+{
+	ft_putendl_fd("Error", 1);
+	perror(str);
+	ft_clean_memory();
 	return (1);
 }

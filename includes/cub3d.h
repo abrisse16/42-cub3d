@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:06:11 by abrisse           #+#    #+#             */
-/*   Updated: 2023/06/11 16:02:49 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/06/11 23:54:14 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <X11/keysym.h>
 # include <limits.h>
 # include <float.h>
-#include <stdint.h>
+# include <stdint.h>
 
 # include "libft.h"
 # include "mlx.h"
@@ -29,7 +29,7 @@
 # define FOV_ANGLE 60
 # define TILE_SIZE 64
 # define MINIMAP_SCALE_FACTOR 0.2
-# define RADIUS 2
+# define RADIUS 3
 # define WALL_STRIP_WIDTH 1
 # define WALK_SPEED 2.0f
 # define TURN_SPEED 2
@@ -45,10 +45,10 @@ typedef struct s_to_draw
 
 typedef struct s_texture_data
 {
-	int			offset_x;
-	int			offset_y;
-	int			width;
-	int			height;
+	int	offset_x;
+	int	offset_y;
+	int	width;
+	int	height;
 	int	color;
 	int	color_y;
 	int	color_x;
@@ -129,7 +129,7 @@ typedef struct s_ray
 typedef struct s_data
 {
 	t_map		map;
-	t_graph	graph;
+	t_graph		graph;
 	t_player	player;
 	t_ray		*rays;
 	char		*no;
@@ -150,6 +150,7 @@ typedef struct s_data
 /* error.c */
 int		ft_error(char *str);
 int		ft_perror(char *str);
+int		ft_perror_clean(char *str);
 
 /* init.c */
 void	init_data(t_data *data);
@@ -189,8 +190,6 @@ void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
 void	draw_color_rect(t_img *img, t_to_draw *to_draw);
 void	draw_circle(t_img *img, t_point *center, int color, t_data *data);
 void	draw_ray(t_img *img, t_point *start, t_ray *ray, t_data *data);
-//void	draw_texture_rect(t_img *img, t_to_draw *to_draw, t_img *texture);
-
 
 /* parsing.c */
 int		parsing(int fd, t_data *data);
@@ -200,6 +199,9 @@ int		check_description(t_data *data);
 
 /* check_map.c */
 int		check_map(t_list **lst, t_data *data);
+
+/* check_map2.c */
+int		check_empty_lines(t_list **lst);
 
 /* get_map.c */
 char	*line_no_space(char *line);
@@ -214,6 +216,6 @@ t_point	create_point(double x, double y);
 void	get_color_x(t_ray *ray, t_texture_data *texture_data, t_img texture);
 void	get_color_y(t_ray *ray, t_data *data, t_texture_data *texture_data,
 			t_img texture);
-int	get_color(t_texture_data *texture_data, t_img texture);
+int		get_color(t_texture_data *texture_data, t_img texture);
 
 #endif

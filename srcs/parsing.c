@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 19:13:25 by abrisse           #+#    #+#             */
-/*   Updated: 2023/06/11 16:03:52 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/06/11 23:28:03 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,25 @@ static int	get_texture_path(char *line, char **target, t_data *data)
 static int	get_color_value(char *line, int *target, t_data *data)
 {
 	char	**new;
+	int		i;
 
-	new = ft_split(line, ", \n");
-	if (!new[3])
+	new = ft_split(line, " \n");
+	i = -1;
+	while (new[++i])
+		;
+	if (i != 2)
+		return (ft_error("Invalid format for the RGB color"));
+	new = ft_split(new[1], ",");
+	i = -1;
+	while (new[++i])
+		;
+	if (i < 3)
 		return (ft_error("Missing value for the RGB color"));
-	target[0] = atoi(new[1]);
-	target[1] = atoi(new[2]);
-	target[2] = atoi(new[3]);
+	if (i > 3)
+		return (ft_error("Too many values for the RGB color"));
+	target[0] = atoi(new[0]);
+	target[1] = atoi(new[1]);
+	target[2] = atoi(new[2]);
 	data->data_count += 1;
 	return (0);
 }
@@ -52,7 +64,7 @@ static int	get_data(char *line, t_data *data)
 		return (get_color_value(line, data->celling, data));
 	else if (ft_strncmp(line, "F ", 2) == 0)
 		return (get_color_value(line, data->floor, data));
-	return (ft_error("Invalid data in the file"));
+	return (ft_error("Invalid file"));
 }
 
 static t_list	*get_file(int fd, t_data *data)
@@ -63,7 +75,7 @@ static t_list	*get_file(int fd, t_data *data)
 	line = get_next_line(fd);
 	if (!line)
 	{
-		ft_error("Empty file");
+		ft_error("Invalid format file");
 		return (NULL);
 	}
 	lst = NULL;
@@ -76,7 +88,7 @@ static t_list	*get_file(int fd, t_data *data)
 		line = get_next_line(fd);
 	}
 	if (!lst)
-		ft_error("Invalid file (map is missing)");
+		ft_error("Invalid file");
 	return (lst);
 }
 

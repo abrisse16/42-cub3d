@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:04:05 by abrisse           #+#    #+#             */
-/*   Updated: 2023/06/11 02:41:27 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/06/11 20:04:41 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,23 @@
 static int	check_args(int ac, char **av)
 {
 	char	*str;
+	char	**split;
+	int		i;
 
 	if (ac != 2)
 		return (ft_error("Incorrect number of arguments"));
-	str = ft_strrchr(av[1], '.');
-	if (str == NULL || ft_strcmp(str, ".cub") || !ft_strcmp(av[1], ".cub"))
+	split = ft_split(av[1], "/");
+	i = -1;
+	while (split[++i])
+		;
+	str = ft_strrchr(split[i - 1], '.');
+	if (str == NULL || ft_strcmp(str, ".cub")
+		|| !ft_strcmp(split[i - 1], ".cub")
+		|| av[1][ft_strlen(av[1]) - 1] == '/')
+	{
+		ft_clean_memory();
 		return (ft_error("Invalid format file"));
+	}
 	return (0);
 }
 
@@ -56,7 +67,7 @@ int	main(int ac, char **av)
 		return (1);
 	fd = open(av[1], O_RDONLY);
 	if (fd < 0)
-		return (ft_perror("open"));
+		return (ft_perror_clean("open"));
 	if (parsing(fd, &data))
 	{
 		close(fd);
