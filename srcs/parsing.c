@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 19:13:25 by abrisse           #+#    #+#             */
-/*   Updated: 2023/06/11 23:28:03 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/06/12 09:37:46 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,14 @@
 static int	get_texture_path(char *line, char **target, t_data *data)
 {
 	char	**new;
+	int		i;
 
 	new = ft_split(line, " \n");
+	i = -1;
+	while (new[++i])
+		;
+	if (i != 2)
+		return (ft_error("Invalid file"));
 	*target = ft_strdup(new[1]);
 	data->data_count += 1;
 	return (0);

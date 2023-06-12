@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 19:32:51 by abrisse           #+#    #+#             */
-/*   Updated: 2023/06/11 20:10:15 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/06/12 09:37:13 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,15 @@
 int	check_extension(char *file, char *ext)
 {
 	char	*str;
+	char	**split;
+	int		i;
 
-	str = ft_strrchr(file, '.');
-	if (str == NULL || ft_strcmp(str, ext) || !ft_strcmp(file, ext))
+	split = ft_split(file, "/");
+	i = -1;
+	while (split[++i])
+		;
+	str = ft_strrchr(split[i - 1], '.');
+	if (str == NULL || ft_strcmp(str, ext) || !ft_strcmp(split[i - 1], ext))
 		return (1);
 	return (0);
 }
