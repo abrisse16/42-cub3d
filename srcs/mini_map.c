@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/31 13:13:45 by abrisse           #+#    #+#             */
-/*   Updated: 2023/06/11 02:41:27 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/06/12 22:20:36 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ static float	render_minimap_background(t_data *data)
 	fact = 1;
 	to_draw.width = data->map.width * TILE_SIZE * MINIMAP_SCALE_FACTOR * fact;
 	to_draw.height = data->map.height * TILE_SIZE * MINIMAP_SCALE_FACTOR * fact;
-	while (to_draw.width > data->graph.win_width
-		|| to_draw.height > data->graph.win_height)
+	while (to_draw.width > data->graph.win_width / 2
+		|| to_draw.height > data->graph.win_height / 2)
 	{
-		fact -= 0.1;
+		fact -= 0.05;
 		to_draw.width = data->map.width * TILE_SIZE * MINIMAP_SCALE_FACTOR
 			* fact;
 		to_draw.height = data->map.height * TILE_SIZE * MINIMAP_SCALE_FACTOR

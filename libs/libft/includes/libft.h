@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcampagn <jcampagn@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 11:03:26 by ambouren          #+#    #+#             */
-/*   Updated: 2023/03/18 16:30:00 by jcampagn         ###   ########.fr       */
+/*   Updated: 2023/06/12 22:55:29 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int					ft_isspace(int c);
 size_t				ft_strlen(const char *s);
 size_t				ft_strlcpy(char *dst, const char *src, size_t size);
 size_t				ft_strlcat(char *dst, const char *src, size_t size);
-char                *ft_strcpy(char *dst, const char *src);
+char				*ft_strcpy(char *dst, const char *src);
 char				*ft_strchr(const char *s, int c);
 char				*ft_strrchr(const char *s, int c);
 char				*ft_strnstr(const char *big, const char *little,
@@ -99,9 +99,9 @@ t_list				*ft_lstremove(t_list **lst, t_list *unit);
 t_list				*ft_lstremove_elem(t_list **lst, void *elem,
 						int (*cmp)());
 void				ft_list_remove_one_if(t_list **lst, void *elem,
-                        int (*cmp)(), void (*del)(void *));
+						int (*cmp)(), void (*del)(void *));
 t_list				*ft_list_nfind(t_list *lst, void *elem, size_t n,
-                        int (*cmp)(const void *, const void *, size_t));
+						int (*cmp)(const void *, const void *, size_t));
 void				ft_lstadd_front(t_list **alst, t_list *nw);
 int					ft_lstsize(t_list *lst);
 t_list				*ft_lstlast(t_list *lst);
@@ -116,9 +116,9 @@ t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
 char				*get_next_line(int fd);
 
 /* Array function */
-char                **ft_array_char(int nb_line, int nb_column);
-int                 ft_nb_line_array(char **tab);
-void                ft_free_double_array(char **tab);
+char				**ft_array_char(int nb_line, int nb_column);
+int					ft_nb_line_array(char **tab);
+void					ft_free_double_array(char **tab);
 
 /* Tree function */
 void				ft_destroy_tree(t_tree **tree, void (*del)(void *));

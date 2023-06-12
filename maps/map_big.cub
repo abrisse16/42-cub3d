@@ -1,15 +1,10 @@
+NO ./assets/walls/stone_wall_01.xpm
+SO ./assets/walls/blue_wall_01.xpm
+WE ./assets/walls/stone_wall_01.xpm
+EA ./assets/walls/stone_wall_01.xpm
 
-
-
-NO ./assets/walls/blue_wall_01.xpm
-SO ./assets/walls/blue_wall_02.xpm
-WE ./assets/walls/blue_wall_02.xpm
-EA ./assets/walls/blue_wall_01.xpm
-
-
-F 250,100,0
-C 225,30,0
-
+F 188,56,123
+C 123,56,188
 
    111111111111111111111111111111111111111
 111000000000000000000000000000111111111101
