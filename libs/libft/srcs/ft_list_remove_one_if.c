@@ -12,12 +12,12 @@
 
 #include "libft.h"
 
-void  ft_list_remove_one_if(t_list **lst, void *elem,
-                            int (*cmp)(), void (*del)(void *))
+void	ft_list_remove_one_if(t_list **lst, void *elem,
+			int (*cmp)(), void (*del)(void *))
 {
-    t_list  *to_del;
+	t_list	*to_del;
 
-    to_del = ft_lstremove_elem(lst, elem, cmp);
-    del(to_del->content);
-    ft_free(to_del);
+	to_del = ft_lstremove_elem(lst, elem, cmp);
+	del(to_del->content);
+	ft_free(to_del);
 }

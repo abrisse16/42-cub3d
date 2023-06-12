@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-int ft_nb_line_array(char **tab)
+int	ft_nb_line_array(char **tab)
 {
-    int len;
+	int	len;
 
-    len = -1;
-    while (tab[++len])
-        ;
-    return (len);
+	len = -1;
+	while (tab[++len])
+		;
+	return (len);
 }
