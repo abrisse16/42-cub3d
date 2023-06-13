@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 11:03:26 by ambouren          #+#    #+#             */
-/*   Updated: 2023/06/12 22:55:29 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/06/13 18:29:50 by ambouren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ char				*get_next_line(int fd);
 /* Array function */
 char				**ft_array_char(int nb_line, int nb_column);
 int					ft_nb_line_array(char **tab);
-void					ft_free_double_array(char **tab);
+void				ft_free_double_array(char **tab);
 
 /* Tree function */
 void				ft_destroy_tree(t_tree **tree, void (*del)(void *));

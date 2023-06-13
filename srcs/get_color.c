@@ -41,7 +41,7 @@ void	get_color_y(t_ray *ray, t_data *data, t_texture_data *texture_data,
 		+ ((int)ray->projected_height / 2)
 		- (data->graph.win_height / 2);
 	texture_data->color_y = ray->distance_from_top * ((float)texture.height
-			/ (int)ray->projected_height);
+			/ ray->projected_height);
 }
 
 int	get_color(t_texture_data *texture_data, t_img texture)

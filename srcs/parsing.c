@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 19:13:25 by abrisse           #+#    #+#             */
-/*   Updated: 2023/06/12 09:37:46 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/06/13 18:46:55 by ambouren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,19 +34,22 @@ static int	get_color_value(char *line, int *target, t_data *data)
 	int		i;
 
 	new = ft_split(line, " \n");
-	i = -1;
-	while (new[++i])
-		;
-	if (i != 2)
+	if (ft_nb_line_array(new) != 2)
+		return (ft_error("Invalid format for the RGB color"));
+	new[0] = ft_strchr(new[1], ',') + 1;
+	i = 1;
+	while (new[0])
+	{
+		new[0] = ft_strchr(new[0], ',');
+		if (new[0])
+			new[0]++;
+		i++;
+	}
+	if (i != 3)
 		return (ft_error("Invalid format for the RGB color"));
 	new = ft_split(new[1], ",");
-	i = -1;
-	while (new[++i])
-		;
-	if (i < 3)
-		return (ft_error("Missing value for the RGB color"));
-	if (i > 3)
-		return (ft_error("Too many values for the RGB color"));
+	if (ft_nb_line_array(new) != 3)
+		return (ft_error("Invalid format for the RGB color"));
 	target[0] = atoi(new[0]);
 	target[1] = atoi(new[1]);
 	target[2] = atoi(new[2]);

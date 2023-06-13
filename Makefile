@@ -6,7 +6,7 @@
 #    By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/08 21:52:26 by abrisse           #+#    #+#              #
-#    Updated: 2023/06/11 23:44:56 by abrisse          ###   ########.fr        #
+#    Updated: 2023/06/13 19:45:44 by ambouren         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,7 @@ LIB_PATH=	libs/
 SRC_PATH=	srcs/
 vpath %.c $(SRC_PATH)
 vpath %.a $(LIB_PATH)
-LIB		=	libft.a libmlx.a
+LIB		=	libft/libft.a libmlx/libmlx.a
 SRC		=	main.c				\
 			check_description.c	\
 			check_map.c			\
@@ -68,7 +68,7 @@ $(EXEC)	:	$(addprefix $(LIB_PATH), $(LIB)) $(OBJ)
 	@echo "$(_GREEN)[$(EXEC): Executable created]$(_NEUTRAL)"
 
 %.a		:
-	@make -C $(@:.a=)
+	@make -C $(dir $(@:.a=))
 
 $(OBJ_PATH)%.o	:	%.c
 	@mkdir -p $(OBJ_PATH) $(DEP_PATH)

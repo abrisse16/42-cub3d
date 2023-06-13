@@ -28,6 +28,8 @@ int	init_img(void *mlx, t_img *img, int width, int height)
 	img->img = mlx_new_image(mlx, width, height);
 	if (!img->img)
 		return (ft_error("mlx_new_image: Failed"));
+	img->width = width;
+	img->height = height;
 	img->addr = mlx_get_data_addr(img->img, &img->bpp, &img->line_len,
 			&img->endian);
 	return (0);
@@ -35,11 +37,30 @@ int	init_img(void *mlx, t_img *img, int width, int height)
 
 static int	get_texture(void *mlx, char *path, t_img *img)
 {
-	img->img = mlx_xpm_file_to_image(mlx, path, &img->width, &img->height);
-	if (!img->img)
+	t_texture_data	texture_data;
+	t_img			tmp;
+	int				x;
+	int				y;
+
+	if (init_img(mlx, img, TILE_SIZE, TILE_SIZE))
+		return (1);
+	tmp.img = mlx_xpm_file_to_image(mlx, path, &tmp.width, &tmp.height);
+	if (!tmp.img)
 		return (ft_error("mlx_xpm_file_to_image: Failed"));
-	img->addr = mlx_get_data_addr(img->img, &img->bpp, &img->line_len,
-			&img->endian);
+	tmp.addr = mlx_get_data_addr(tmp.img, &tmp.bpp, &tmp.line_len,
+			&tmp.endian);
+	y = -1;
+	while (++y < TILE_SIZE)
+	{
+		x = -1;
+		while (++x < TILE_SIZE)
+		{
+			texture_data.color_x = x * ((float)tmp.width / TILE_SIZE);
+			texture_data.color_y = y * ((float)tmp.height / TILE_SIZE);
+			my_mlx_pixel_put(img, x, y, get_color(&texture_data, tmp));
+		}
+	}
+	mlx_destroy_image(mlx, tmp.img);
 	return (0);
 }
 
