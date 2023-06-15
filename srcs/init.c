@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 21:13:34 by abrisse           #+#    #+#             */
-/*   Updated: 2023/06/11 02:42:51 by abrisse          ###   ########.fr       */
+/*   Updated: 2023/06/13 21:01:42 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,8 @@ int	init_graph(t_data *data)
 		return (ft_error("mlx_init: Failed"));
 	mlx_get_screen_size(data->graph.mlx, &data->graph.win_width,
 		&data->graph.win_height);
-	data->graph.win_width = data->graph.win_width * 0.8;
-	data->graph.win_height = data->graph.win_height * 0.8;
+	data->graph.win_width = data->graph.win_width * WIN_SCALE_FACTOR;
+	data->graph.win_height = data->graph.win_height * WIN_SCALE_FACTOR;
 	data->num_rays = data->graph.win_width / WALL_STRIP_WIDTH;
 	data->rays = ft_malloc(sizeof(t_ray) * data->num_rays);
 	if (!data->rays)

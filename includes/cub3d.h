@@ -6,7 +6,7 @@
 /*   By: abrisse <abrisse@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 12:06:11 by abrisse           #+#    #+#             */
-/*   Updated: 2023/06/13 20:49:00 by ambouren         ###   ########.fr       */
+/*   Updated: 2023/06/13 21:02:50 by abrisse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,11 @@
 
 # define FOV_ANGLE 60
 # define TILE_SIZE 64
+# define WIN_SCALE_FACTOR 0.6
 # define MINIMAP_SCALE_FACTOR 0.2
 # define RADIUS 3
 # define WALL_STRIP_WIDTH 1
-# define WALK_SPEED 2.0f
+# define WALK_SPEED 3.0f
 # define TURN_SPEED 2
 
 typedef struct s_to_draw
