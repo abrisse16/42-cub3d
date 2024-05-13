@@ -10,12 +10,12 @@ This project is inspired by the world-famous Wolfenstein 3D game, which was the 
 ##
 
 ### Final grade
-[![abrisse's 42 cub3d Score](https://badge42.vercel.app/api/v2/cl1rqvecz002109l7rv0oprry/project/3105810)](https://github.com/JaeSeoKim/badge42)
+[![abrisse's 42 cub3d Score](https://badge.nimon.fr/api/v2/clw51aj8x026501rzp5ef4x2f/project/3105810)](https://github.com/Nimon77/badge42)
 
 ### Subject
-English version [here](https://cdn.intra.42.fr/pdf/pdf/90204/en.subject.pdf)
+English version [here](https://github.com/abrisse16/42-subjects/blob/7385a594afd19b06ab40ed62b5e8c818d2d8bd21/cub3d-subject-v10.en.pdf)
 <br>
-French version [here](https://cdn.intra.42.fr/pdf/pdf/90205/fr.subject.pdf)
+French version [here](https://github.com/abrisse16/42-subjects/blob/7385a594afd19b06ab40ed62b5e8c818d2d8bd21/cub3d-subject-v10.fr.pdf)
 
 </div>
 
