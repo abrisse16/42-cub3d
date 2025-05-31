@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-t_hash_set	*ft_new_hashset(int (*hashcode)())
+t_hash_set	*ft_new_hashset(int (*hashcode)(void *))
 {
 	t_hash_set	*ret;
 

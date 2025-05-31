@@ -13,7 +13,7 @@
 #include "libft.h"
 
 void	ft_list_remove_one_if(t_list **lst, void *elem,
-			int (*cmp)(), void (*del)(void *))
+			int (*cmp)(void *, void *), void (*del)(void *))
 {
 	t_list	*to_del;
 

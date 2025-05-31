@@ -97,9 +97,9 @@ void				ft_putstr_fd(char *s, int fd);
 t_list				*ft_lstnew(void *content);
 t_list				*ft_lstremove(t_list **lst, t_list *unit);
 t_list				*ft_lstremove_elem(t_list **lst, void *elem,
-						int (*cmp)());
+						int (*cmp)(void *, void *));
 void				ft_list_remove_one_if(t_list **lst, void *elem,
-						int (*cmp)(), void (*del)(void *));
+						int (*cmp)(void *, void *), void (*del)(void *));
 t_list				*ft_list_nfind(t_list *lst, void *elem, size_t n,
 						int (*cmp)(const void *, const void *, size_t));
 void				ft_lstadd_front(t_list **alst, t_list *nw);
@@ -129,7 +129,7 @@ void				ft_depth_first_iter(t_tree *tree, void (*f)(void *));
 void				ft_breadth_first_iter(t_tree *tree, void (*f)(void *));
 
 /* HashSet function */
-t_hash_set			*ft_new_hashset(int (*hashcode)());
+t_hash_set			*ft_new_hashset(int (*hashcode)(void *));
 void				ft_put_element(t_hash_set *set, void *element);
 void				ft_free_hashset(t_hash_set *set, void (*del)(void *));
 void				*ft_remove_element(t_hash_set *set, void *element,
