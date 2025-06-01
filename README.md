@@ -116,9 +116,93 @@ Enhanced gameplay features include:
 
 ### Map parsing
 
-<p align=center>
-	🚧 UNDER CONSTRUCTION 🚧
-</p>
+Map parsing is the critical first phase of the cub3D engine, responsible for reading and validating the scene description file (`.cub`) to extract all necessary configuration data. The parsing algorithm follows a **sequential two-phase approach** that ensures data integrity before proceeding to the rendering phase.
+
+#### Parsing Strategy Overview
+
+The parser implements a **state-driven parsing algorithm** that processes the file in two distinct phases:
+
+1. **Scene Description Parsing** - Extract environment configuration
+2. **Map Data Parsing** - Process and validate the maze layout
+
+#### Phase 1: Scene Description Parsing
+
+The parser reads the file line by line, analyzing each line to determine its content type. During this phase, the system looks for **six mandatory elements** that must appear before the map data:
+
+**Texture Path Extraction**: The parser identifies texture definition lines by their prefixes (`NO`, `SO`, `WE`, `EA`) and extracts the corresponding file paths. Each line is split on whitespace, validated to ensure it contains exactly two elements (the identifier and the path), and the path is stored for later texture loading.
+
+**Color Configuration Processing**: Floor (`F`) and ceiling (`C`) color lines are parsed using a more complex algorithm. The system:
+- Splits the line to isolate the RGB values string
+- Validates the comma-separated format by counting separators
+- Converts each RGB component to integer values
+- Ensures all values fall within the valid range (0-255)
+
+**Progress Tracking**: The parser maintains a counter (`data_count`) that increments with each successfully parsed element. This counter serves as a state indicator - when it reaches 6, the parser knows all required scene description elements have been found and switches to map parsing mode.
+
+#### Phase 2: Map Data Processing
+
+Once all scene description elements are identified, the remaining lines constitute the map data. The parser employs a **linked list collection strategy** to handle variable map sizes efficiently.
+
+**Dynamic Map Collection**: The parser continues reading lines but now stores them in a linked list structure rather than processing them immediately. This approach allows for maps of any size without pre-allocation.
+
+**Map Dimensioning Algorithm**: Before creating the final map structure, the parser calculates optimal dimensions by:
+- Counting total lines for height determination
+- Scanning all lines to find the maximum width
+- Accounting for potential trailing newlines and whitespace
+
+**Memory Layout Conversion**: The linked list is then converted to a 2D character array for efficient random access during gameplay. Each line is copied while preserving spatial relationships and padding shorter lines to maintain rectangular structure.
+
+#### Map Validation System
+
+The validation system implements a **multi-layered verification approach** with four critical validation stages:
+
+**1. Structural Integrity Validation**
+The parser first removes any leading empty lines while ensuring the map isn't entirely empty. It then scans through the remaining content to detect invalid empty lines within the map body, which would create undefined behavior during traversal.
+
+**2. Character Set Validation and Player Detection**
+The algorithm performs a comprehensive scan of every character in the map grid:
+- **Character Validation**: Ensures only valid characters (`0`, `1`, `N`, `S`, `E`, `W`, ` `, `\n`) are present
+- **Player Spawn Detection**: Identifies exactly one player starting position among the directional characters
+- **Coordinate Calculation**: Converts the grid position to world coordinates using the tile size constant
+
+The player position is calculated using the formula:
+```
+player.x = (grid_x * TILE_SIZE) + (TILE_SIZE / 2)
+player.y = (grid_y * TILE_SIZE) + (TILE_SIZE / 2)
+```
+
+**3. Topological Enclosure Validation**
+The most sophisticated validation ensures the map forms a closed, traversable space. The algorithm:
+- Identifies all walkable spaces (empty areas and player positions)
+- For each walkable cell, verifies that all four cardinal directions contain either walls or other valid spaces
+- Prevents edge cases where players could "escape" the map boundaries
+- Uses a **boundary checking algorithm** that considers map edges as implicit walls
+
+**4. Resource Validation**
+The final validation phase verifies that all referenced resources are valid:
+- **File Extension Verification**: Ensures all texture paths point to `.xpm` files
+- **Path Accessibility**: Basic validation that paths are properly formatted
+- **Color Range Validation**: Confirms RGB values are within display range (0-255)
+
+#### Data Structure Population Strategy
+
+Upon successful validation, the parser populates the main engine data structures using a **hierarchical approach**:
+
+- **Map Structure**: Contains the validated 2D grid, calculated dimensions, and player starting direction
+- **Player Structure**: Holds precise spawn coordinates and initial orientation derived from the map character
+- **Texture Registry**: Stores file paths as strings for deferred loading during graphics initialization
+- **Environment Configuration**: RGB color arrays for efficient rendering calculations
+
+#### Error Handling Philosophy
+
+The parsing system employs a **fail-fast validation strategy** with descriptive error reporting:
+
+- **Immediate Termination**: Any validation failure stops parsing immediately
+- **Contextual Error Messages**: Specific feedback indicates exactly what validation failed
+- **State Preservation**: Memory cleanup ensures no partial states persist after failures
+- **Comprehensive Coverage**: Every possible malformation has a corresponding error case
+
+This robust parsing architecture ensures that only perfectly valid, playable maps proceed to the rendering pipeline, eliminating runtime errors and undefined behavior during gameplay while providing clear feedback for map creation and debugging.
 
 ### Raycasting
 
