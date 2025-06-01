@@ -28,8 +28,6 @@ French version [here](https://github.com/abrisse16/42-subjects/blob/09a9091d4d9e
 	- [Display & Rendering](#display--rendering)
 	- [Controls](#controls)
 	- [Scene Description File (.cub)](#scene-description-file-cub)
-		- [Required Elements](#required-elements)
-		- [Map Requirements](#map-requirements)
 	- [Bonus Features](#bonus-features)
 - [How it Works](#how-it-works)
 	- [Map parsing](#map-parsing)
@@ -124,44 +122,194 @@ Enhanced gameplay features include:
 
 ### Raycasting
 
-What is raycasting ?
+#### What is raycasting?
 
 Raycasting is a rendering technique used to create a 3D perspective in a 2D map. It is based on the projection of a 3D space onto a 2D plane. It is the same technique used in the famous game Wolfenstein 3D.
+
 The principle is to cast a ray from the player's position in the direction of the view, and to calculate the distance between the player and the first wall encountered by the ray. This distance is then used to calculate the height of the wall to be displayed on the screen.
+
 From a chosen field of view and a chosen resolution, we can calculate the angle between each ray. We can then cast a ray for each column of pixels on the screen and determine the height of the wall to be displayed in each column.
 
+#### Required Information Per Frame
 
-For each render frame, we need to know the following information :
-- The player's position
-- The player's orientation
-- The field of view, constant for the whole game
-- The resolution of the screen, constant for the whole game
+For each render frame, we need to know the following information:
+- **Player's position** (`t_point coord` in `t_player`)
+- **Player's orientation** (`float angle` in `t_player`)
+- **Field of view** (constant for the whole game, defined as `FOV_ANGLE 60` degrees)
+- **Screen resolution** (constant for the whole game, determined by window size)
 
-With that, for each ray, we can use the following algorithm.
+#### The Raycasting Algorithm
 
-1. Determine the angle of the ray. The angle is determined by the orientation of the player and the field of view. This information permits to determine if the ray is going to intersect the faces north or south of the wall or the faces east or west of the wall.
+For each ray cast (one per screen column), the following algorithm is implemented in our source files:
 
-2. Determine the coordinates of the first horizontal intersection of the ray with a wall.
+**1. Ray Direction Calculation** (`cast_all_rays()` in `raycasting.c`)
 
-	2.1. Determine the coordinates of the first horizontal intersection of the ray with the horizontal grid lines of the map.
-	
-	2.2. Determine the horizontal (x) and vertical (y) step of the intersection of the ray and horizontal grid lines of the map.
+The angle of each ray is calculated using the player's viewing angle and the field of view:
+```c
+ray_angle = data->player.angle - atan((i - data->num_rays / 2) / data->distance_projection);
+```
 
-	2.3. Until the coordinates of the intersection is not a wall, add the step to the coordinates of the intersection.
+The ray direction flags are determined:
+- `is_facing_up`: true if angle is between 0 and π
+- `is_facing_left`: true if angle is between π/2 and 3π/2
 
-3. Determine the coordinates of the first vertical intersection of the ray with a wall, using the same algorithm as for the horizontal intersection.
+**2. Horizontal Grid Line Intersection** (`horizontal_intercept()` in `ray_intercept.c`)
 
-At this point, we have the coordinates of the intersection of the ray with the first horizontal face of the wall and the coordinates of the intersection of the ray with the first vertical face of the wall.
+2.1. **First intersection calculation**: Find where the ray intersects horizontal grid lines
+```c
+ray->inter.y = floor(data->player.coord.y / TILE_SIZE) * TILE_SIZE;
+if (!ray->is_facing_up)
+    ray->inter.y += TILE_SIZE;
+ray->inter.x = data->player.coord.x + (data->player.coord.y - ray->inter.y) / tan(ray->angle);
+```
 
-5. Determine the distance between the player and each intersection. Determine which intersection is the closest to the player.
+2.2. **Step calculation**: Determine incremental steps
+```c
+ray->step.y = TILE_SIZE * (ray->is_facing_up ? -1 : 1);
+ray->step.x = TILE_SIZE / tan(ray->angle);
+```
 
-6. Determine the height of the wall to be displayed on the screen. The height is determined by the distance between the player and the intersection. The closer the intersection is to the player, the higher the wall will be displayed on the screen.
+2.3. **Wall detection**: Step through grid lines until hitting a wall
+```c
+while (ray->inter.x > 0 && ray->inter.x < data->map.width * TILE_SIZE &&
+       ray->inter.y > 0 && ray->inter.y < data->map.height * TILE_SIZE) {
+    if (has_wall_at(data, ray->inter.x, ray->inter.y - ray->is_facing_up)) {
+        ray->horz_hit_found = 1;
+        set_point(&ray->horz_hit_coord, ray->inter.x, ray->inter.y);
+        return;
+    }
+    ray->inter.x += ray->step.x;
+    ray->inter.y += ray->step.y;
+}
+```
 
-7. Knowing the ray angle and if the ray intersects the horizontal or vertical faces of the wall, we can determine which texture to display on the wall.
+**3. Vertical Grid Line Intersection** (`vertical_intercept()` in `ray_intercept.c`)
 
-<p align=center>
-	🚧 UNDER CONSTRUCTION 🚧
-</p>
+The same algorithm is applied for vertical grid lines:
+- Calculate first vertical intersection point
+- Determine incremental steps
+- Step through until hitting a wall
+
+**4. Distance Comparison** (`get_shorter_distance()` in `raycasting.c`)
+
+Calculate distances from player to both intersection points and choose the closest:
+```c
+if (ray->horz_hit_distance < ray->vert_hit_distance) {
+    set_point(&ray->hit_coord, ray->horz_hit_coord.x, ray->horz_hit_coord.y);
+    ray->hit_distance = ray->horz_hit_distance;
+    ray->was_hit_horizontal = 1;
+} else {
+    set_point(&ray->hit_coord, ray->vert_hit_coord.x, ray->vert_hit_coord.y);
+    ray->hit_distance = ray->vert_hit_distance;
+}
+```
+
+**5. Fisheye Effect Correction** (`render_walls()` in `render_walls.c`)
+
+To prevent the fisheye distortion effect, the perpendicular distance is calculated:
+```c
+data->rays[x].wall_distance = data->rays[x].hit_distance * cos(data->rays[x].angle - data->player.angle);
+```
+
+**6. Wall Height Projection**
+
+The projected wall height on screen is calculated using the corrected distance:
+```c
+data->rays[x].projected_height = (TILE_SIZE / data->rays[x].wall_distance) * data->distance_projection;
+```
+
+**Why closer walls appear taller:**
+- **Inverse relationship**: Wall height is inversely proportional to distance (`TILE_SIZE / wall_distance`)
+- **Distance = 64 units**: Wall appears at full screen height
+- **Distance = 128 units**: Wall appears at half screen height  
+- **Distance = 256 units**: Wall appears at quarter screen height
+- **Distance projection factor**: `data->distance_projection` is calculated as `(win_width/2) / tan(FOV/2)`, which maintains correct perspective scaling
+
+**Screen positioning**: The wall is centered vertically on screen:
+```c
+texture_data.offset_y = (data->graph.win_height / 2) - ((int)data->rays[x].projected_height / 2);
+texture_data.height = (data->graph.win_height / 2) + ((int)data->rays[x].projected_height / 2);
+```
+
+**7. Texture Selection** (`get_texture_to_render()` in `render_walls.c`)
+
+Based on the ray direction and hit type, the appropriate texture is selected:
+```c
+if (ray->was_hit_horizontal) {
+    if (ray->is_facing_up)
+        return (data->graph.north_texture);  // North wall texture
+    else
+        return (data->graph.south_texture);  // South wall texture
+} else {
+    if (ray->is_facing_left)
+        return (data->graph.west_texture);   // West wall texture
+    else
+        return (data->graph.east_texture);   // East wall texture
+}
+```
+
+**8. Texture Mapping** (`get_color_x()` and `get_color_y()` in `get_color.c`)
+
+The exact texture coordinates are calculated to map the 2D texture onto the 3D wall surface:
+
+**Horizontal Texture Coordinate (X):**
+```c
+// For horizontal wall hits (hitting top/bottom of wall)
+if (ray->was_hit_horizontal) {
+    if (ray->is_facing_up)
+        texture_data->color_x = ((int)ray->hit_coord.x % TILE_SIZE) * (texture.width / TILE_SIZE);
+    else
+        texture_data->color_x = (TILE_SIZE - 1 - ((int)ray->hit_coord.x % TILE_SIZE)) * (texture.width / TILE_SIZE);
+}
+// For vertical wall hits (hitting left/right side of wall)
+else {
+    if (ray->is_facing_left)
+        texture_data->color_x = (TILE_SIZE - 1 - ((int)ray->hit_coord.y % TILE_SIZE)) * (texture.width / TILE_SIZE);
+    else
+        texture_data->color_x = ((int)ray->hit_coord.y % TILE_SIZE) * (texture.width / TILE_SIZE);
+}
+```
+
+- **Purpose**: Determines which vertical slice of the texture to use
+- **Calculation**: Uses the remainder of the hit position within the tile (`% TILE_SIZE`)
+- **Scaling**: Multiplies by texture width ratio to map tile coordinates to texture coordinates
+- **Direction handling**: Reverses texture for certain orientations to maintain consistent lighting
+
+**Vertical Texture Coordinate (Y):**
+```c
+ray->distance_from_top = ray->y + ((int)ray->projected_height / 2) - (data->graph.win_height / 2);
+texture_data->color_y = ray->distance_from_top * ((float)texture.height / ray->projected_height);
+```
+
+- **Purpose**: Determines which horizontal slice of the texture to use for each screen pixel
+- **Screen mapping**: `distance_from_top` calculates how far the current pixel is from the top of the wall
+- **Texture scaling**: The ratio `(texture.height / ray->projected_height)` scales the texture to fit the projected wall height
+- **Stretching behavior**: 
+  - Close walls: Texture appears normal size
+  - Far walls: Texture is compressed vertically
+  - Very close walls: Texture is stretched, showing only a portion of the full texture
+
+**Texture Sampling:**
+```c
+return (*(int *)(texture.addr + (texture_data->color_y * texture.line_len + 
+                texture_data->color_x * (texture.bpp / 8))));
+```
+
+This directly reads the pixel color from the texture image data at the calculated coordinates.
+
+**9. Pixel Rendering**
+
+For each pixel column, the texture is sampled and drawn to the screen buffer using the calculated coordinates and selected texture.
+
+#### Implementation Details
+
+- **Grid-based collision detection**: The world is divided into uniform tiles (`TILE_SIZE`)
+- **DDA-like algorithm**: Digital Differential Analyzer approach for efficient ray-grid intersection
+- **Texture caching**: Wall textures are pre-loaded and stored in `t_img` structures
+- **Performance optimization**: Only one ray per screen column is cast (typically 640-1920 rays per frame)
+- **Memory management**: Ray data is stored in a dynamically allocated array (`t_ray *rays`)
+
+This implementation provides real-time 3D rendering performance while maintaining the authentic retro aesthetic of early 3D games.
 
 ## Usage
 
@@ -214,13 +362,6 @@ Example:
 
 The game supports various map files with the `.cub` extension. Make sure your map file follows the format described in the [Description file](#description-file) section.
 
-#### Color Format in .cub Files
-
-For the floor and ceiling colors in the map description file, use the RGB format (0-255 for each component):
-```
-F 220,100,0    # Floor color (RGB)
-C 225,30,0     # Ceiling color (RGB)
-```
 
 ## Troubleshooting
 
