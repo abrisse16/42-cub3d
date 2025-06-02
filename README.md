@@ -122,7 +122,7 @@ Map parsing is the critical first phase of the cub3D engine, responsible for rea
 
 The parser implements a **state-driven parsing algorithm** that processes the file in two distinct phases:
 
-1. **Scene Description Parsing** - Extract environment configuration
+1. **Scene Description Parsing** - Extract texture paths and color configurations
 2. **Map Data Parsing** - Process and validate the maze layout
 
 #### Phase 1: Scene Description Parsing
@@ -188,8 +188,8 @@ The final validation phase verifies that all referenced resources are valid:
 
 Upon successful validation, the parser populates the main engine data structures using a **hierarchical approach**:
 
-- **Map Structure**: Contains the validated 2D grid, calculated dimensions, and player starting direction
-- **Player Structure**: Holds precise spawn coordinates and initial orientation derived from the map character
+- **Map Structure** (`t_map`): Contains the validated 2D grid, calculated dimensions, and player starting direction
+- **Player Structure** (`t_player`): Holds precise spawn coordinates and initial orientation derived from the map character
 - **Texture Registry**: Stores file paths as strings for deferred loading during graphics initialization
 - **Environment Configuration**: RGB color arrays for efficient rendering calculations
 
@@ -224,6 +224,34 @@ Raycasting operates on a **column-by-column rendering strategy**. For each verti
 
 **Grid-Based World Representation**: The game world is represented as a uniform grid where each cell is either empty (walkable) or contains a wall. This discrete representation simplifies collision detection and ray intersection calculations.
 
+#### The DDA Algorithm Foundation
+
+The raycasting implementation is built upon the **Digital Differential Analysis (DDA) algorithm**, a highly efficient method for determining which grid squares a line traverses. Originally developed for rasterizing lines on pixel grids, DDA is perfectly suited for raycasting because it guarantees that **every wall the ray encounters will be detected** without missing any intersections.
+
+**Why DDA Over Naive Ray Tracing?**
+
+Traditional ray tracing approaches use fixed step sizes, advancing the ray by a constant distance at each iteration. However, this method has critical flaws:
+
+- **Wall Penetration Risk**: If the step size is too large, rays can pass completely through thin walls without detection
+- **Precision vs Performance Trade-off**: Smaller step sizes reduce miss probability but dramatically increase computational cost
+- **Infinite Precision Requirement**: Perfect accuracy would require infinitely small steps, making the approach computationally impossible
+
+**The DDA Solution**
+
+DDA eliminates these problems by **adapting step sizes dynamically** based on the grid structure. Instead of using constant increments, the algorithm calculates the exact distance to the next grid line intersection, ensuring:
+
+- **Zero Miss Rate**: Every wall intersection is mathematically guaranteed to be detected
+- **Optimal Efficiency**: Only the minimum necessary calculations are performed
+- **Perfect Precision**: Wall hits are detected at their exact intersection points
+
+**Grid-Line Intersection Strategy**
+
+The algorithm operates on the principle that walls in a grid-based world always align with grid boundaries. Therefore, any ray-wall collision must occur at either:
+- **Horizontal grid lines** (boundaries between vertically adjacent cells)
+- **Vertical grid lines** (boundaries between horizontally adjacent cells)
+
+By stepping from grid line to grid line rather than using arbitrary increments, DDA ensures comprehensive wall detection while maintaining computational efficiency.
+
 #### The Nine-Step Raycasting Process
 
 **1. Ray Direction Calculation**
@@ -252,7 +280,18 @@ is_facing_left = (ray_angle > PI/2 && ray_angle < 3*PI/2)
 ```
 
 **3. Horizontal Grid Intersection Algorithm**
-The algorithm employs a **grid-stepping technique** to find where the ray intersects horizontal grid lines. Starting from the player position, it calculates the first horizontal grid line the ray will cross, then steps incrementally along the ray until hitting a wall or reaching map boundaries.
+The algorithm employs a **DDA-based grid-stepping technique** to find where the ray intersects horizontal grid lines. This approach implements the core DDA principle by calculating exact distances to grid boundaries rather than using fixed step sizes.
+
+Starting from the player position, the algorithm:
+1. **Identifies the first horizontal grid line** the ray will cross based on the ray's direction
+2. **Calculates the exact intersection point** using trigonometric relationships
+3. **Determines optimal step sizes** to jump precisely from one grid line to the next
+4. **Iteratively steps along grid boundaries** until hitting a wall or reaching map limits
+
+**Why This Approach Works:**
+- **Guaranteed Detection**: Since walls align with grid boundaries, checking every grid line intersection ensures no walls are missed
+- **Adaptive Stepping**: Step sizes automatically adjust to the ray's angle, maintaining efficiency across all directions
+- **Mathematical Precision**: Intersections are calculated exactly, not approximated through sampling
 
 The stepping process uses **trigonometric relationships** to determine both the intersection points and the incremental steps needed to move from one grid line to the next.
 
@@ -279,7 +318,7 @@ next_y = current_y + step_y
 ```
 
 **4. Vertical Grid Intersection Algorithm**
-A parallel process calculates intersections with vertical grid lines using analogous trigonometric relationships:
+A parallel DDA process calculates intersections with vertical grid lines using analogous trigonometric relationships. This dual-axis approach ensures complete coverage of all possible wall intersections.
 
 **Vertical Intersection:**
 
@@ -297,7 +336,14 @@ step_x = TILE_SIZE * (is_facing_left ? -1 : 1)
 step_y = TILE_SIZE * tan(ray_angle)
 ```
 
-This creates two potential collision points for each ray - one from horizontal stepping and one from vertical stepping.
+**DDA Intersection Strategy:**
+The algorithm simultaneously traces both horizontal and vertical grid line intersections, creating two potential collision points for each ray. This dual-tracking approach is fundamental to DDA's reliability:
+
+- **Horizontal Stepping**: Detects walls that form the top/bottom boundaries of grid cells
+- **Vertical Stepping**: Detects walls that form the left/right boundaries of grid cells
+- **Comprehensive Coverage**: Together, these ensure every possible wall orientation is detected
+
+The closest intersection from either stepping process determines the final wall hit, guaranteeing that the ray stops at the first wall it encounters regardless of the wall's orientation within the grid.
 
 **5. Distance Comparison and Selection**
 The algorithm compares the distances from the player to both intersection points and selects the closer collision:
