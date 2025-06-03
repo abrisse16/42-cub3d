@@ -212,9 +212,13 @@ Raycasting is a rendering technique that creates the illusion of 3D perspective 
 
 The core principle involves casting virtual rays from the player's position across their field of view and calculating distances to walls. These distances are then used to determine the height at which walls should appear on screen, creating the perspective effect where closer objects appear larger and distant objects appear smaller.
 
+<br>
+
 <div align="center">
-<img src="img/Illustration-07.png" alt="Field of View diagram" width="500">
+<img src="img/Diagram-09.png" alt="Field of View diagram" style="max-width: 100%; max-height: 400px; width: auto; height: auto;">
 </div>
+
+<br>
 
 #### The Fundamental Algorithm
 
@@ -226,16 +230,15 @@ Raycasting operates on a **column-by-column rendering strategy**. For each verti
 
 **Field of View Distribution**: Rays are distributed across the player's field of view (typically 60 degrees) with each ray corresponding to one screen column. The angular spacing between rays is calculated as `FOV / screen_width`.
 
+<br>
+
 <div align="center">
 
-<img src="img/Illustration-13.png" alt="Basic 3D projection from 2D raycasting" width="700">
+<img src="img/Diagram-08.png" alt="Basic 3D projection from 2D raycasting" style="max-width: 100%; max-height: 400px; width: auto; height: auto;">
 <br><i>Player's Field of View (FOV): from 2D raycast to 3D rendering</i>
 </div>
 
-<div align="center">
-<img src="img/Illustration-10.png" alt="FOV projection plane" width="500">
-<br><i>60° FOV cone projection onto the 2D screen plane</i>
-</div>
+<br>
 
 **Grid-Based World Representation**: The game world is represented as a uniform grid where each cell is either empty (walkable) or contains a wall. This discrete representation simplifies collision detection and ray intersection calculations.
 
@@ -251,11 +254,15 @@ Traditional ray tracing approaches use fixed step sizes, advancing the ray by a 
 - **Precision vs Performance Trade-off**: Smaller step sizes reduce miss probability but dramatically increase computational cost
 - **Infinite Precision Requirement**: Perfect accuracy would require infinitely small steps, making the approach computationally impossible
 
+<br>
+
 <div align="center">
-<img src="img/Diagram-02.png" alt="Comparison of fixed-step ray tracing approaches" height="400">
+<img src="img/Diagram-02.png" alt="Comparison of fixed-step ray tracing approaches" style="max-width: 100%; max-height: 400px; width: auto; height: auto;">
 <br><i>Fixed-step ray tracing comparison: <strong>Left side</strong> shows large steps missing walls entirely, 
 <br><strong>Right side</strong> shows small steps achieving accuracy but requiring excessive calculations</i>
 </div>
+
+<br>
 
 **The DDA Solution**
 
@@ -265,10 +272,14 @@ DDA eliminates these problems by **adapting step sizes dynamically** based on th
 - **Optimal Efficiency**: Only the minimum necessary calculations are performed
 - **Perfect Precision**: Wall hits are detected at their exact intersection points
 
+<br>
+
 <div align="center">
-<img src="img/Diagram-03.png" alt="DDA adaptive stepping" height="400">
+<img src="img/Diagram-03.png" alt="DDA adaptive stepping" style="max-width: 100%; max-height: 400px; width: auto; height: auto;">
 <br><i>DDA adaptive stepping: intercepting every grid line and detecting all walls</i>
 </div>
+
+<br>
 
 **Grid-Line Intersection Strategy**
 
@@ -278,10 +289,14 @@ The algorithm operates on the principle that walls in a grid-based world always 
 
 By stepping from grid line to grid line rather than using arbitrary increments, DDA ensures comprehensive wall detection while maintaining computational efficiency.
 
+<br>
+
 <div align="center">
-<img src="img/Illustration-01.png" alt="Basic ray intersections" width="500">
+<img src="img/Diagram-04.png" alt="Basic ray intersections" style="max-width: 100%; max-height: 400px; width: auto; height: auto;">
 <br><i>Finding Wall Hits: ray with horizontal and vertical intersections</i>
 </div>
+
+<br>
 
 #### The Nine-Step Raycasting Process
 
@@ -326,10 +341,14 @@ Starting from the player position, the algorithm:
 
 The stepping process uses **trigonometric relationships** to determine both the intersection points and the incremental steps needed to move from one grid line to the next.
 
+<br>
+
 <div align="center">
-<img src="img/Illustration-03.png" alt="Horizontal grid intersection algorithm" width="500">
+<img src="img/Diagram-05.png" alt="Horizontal grid intersection algorithm" style="max-width: 100%; max-height: 400px; width: auto; height: auto;">
 <br><i>Horizontal grid intersection: player position, intersection points, and incremental steps</i>
 </div>
+
+<br>
 
 **Horizontal Intersection:**
 
@@ -341,10 +360,13 @@ if (!is_facing_up) first_y += TILE_SIZE
 first_x = player_x + (player_y - first_y) / tan(ray_angle)
 ```
 
+<br>
+
 <div align="center">
-<img src="img/Illustration-05.png" alt="First horizontal intersection calculation" width="500">
-<br><i>Mathematical relationships for calculating the first horizontal intersection</i>
+<img src="img/Diagram-06.png" alt="First horizontal intersection calculation" style="max-width: 100%; max-height: 300px; width: auto; height: auto;">
 </div>
+
+<br>
 
 *Incremental Steps:*
 ```
@@ -352,10 +374,13 @@ step_y = TILE_SIZE * (is_facing_up ? -1 : 1)
 step_x = TILE_SIZE / tan(ray_angle)
 ```
 
+<br>
+
 <div align="center">
-<img src="img/Illustration-04.png" alt="Trigonometric calculation triangle" width="400">
-<br><i>Trigonometric relationships for calculating step_x and step_y</i>
+<img src="img/Diagram-07.png" alt="Trigonometric calculation triangle" style="max-width: 100%; max-height: 300px; width: auto; height: auto;">
 </div>
+
+<br>
 
 *Next Intersection Points:*
 ```
