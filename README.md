@@ -592,7 +592,15 @@ If you encounter any issues while compiling or running the project, please check
 
 ## Resources, documentation and references
 
+- [Game Engine Black Book: Wolfenstein 3D v2.2](https://fabiensanglard.net/b/gebbwolf3d.pdf) - Analysis of the original Wolfenstein 3D engine by Fabien Sanglard
+
 - [42 MiniLibX](https://github.com/42paris/minilibx-linux) - Linux version of the 42 MiniLibX library
+- [XPM File Format](https://en.wikipedia.org/wiki/X_PixMap) - Information about the XPM image format used for textures
+- [Lode's Computer Graphics Tutorial - Raycasting](https://lodev.org/cgtutor/raycasting.html) - Comprehensive tutorial on raycasting with detailed DDA algorithm explanation and implementation
+
+**DDA Algorithm Additional References:**
+- [GeeksforGeeks - DDA Line Generation Algorithm](https://www.geeksforgeeks.org/dda-line-generation-algorithm-computer-graphics/) - Detailed explanation with multiple language implementations and algorithm analysis
+- [TutorialsPoint - DDA Algorithm](https://www.tutorialspoint.com/computer_graphics/line_generation_algorithm.htm) - Computer graphics fundamentals including DDA algorithm with step-by-step breakdown
 
 ---
 <div align=center>
